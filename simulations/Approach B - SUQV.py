@@ -12,9 +12,6 @@ V_init = S          # Validator vault
 fee = 0.5           # Fee on rewards
 
 # Simulation parameters
-# rewards = 0         # rewards account
-# claimedRewards = 0
-# TotalShares = 0
 mid = (S + U) / 2
 users = {}
 VaultBalances = {"Q": Q_init, 
@@ -46,7 +43,6 @@ def show_state():
 
 # Stake: Transfer amount from Q to V
 def stakeAndRestake(amount):
-    # global Q, V, rewards, VaultBalances['TotalShares']
     print('Staking',amount,'...')
     VaultBalances['V'] += amount
     VaultBalances['Q'] -= amount
@@ -54,14 +50,12 @@ def stakeAndRestake(amount):
 
 # Unstake: Transfer amount from V to Q
 def unstake(amount):
-    # global Q, V, VaultBalances['TotalShares']
     print('Unstaking',amount,'...')
     VaultBalances['V'] -= amount
     VaultBalances['Q'] += amount
     return
 
 def deposit(name, amount):
-    # global Q, VaultBalances['TotalShares'], VaultBalances['claimedRewards'], rewards
     # Increase user's shares
     numOfShares = amount / sharePx()
     if name in users:
@@ -75,19 +69,15 @@ def deposit(name, amount):
     users['Treasury'] += numOfShares
     VaultBalances['TotalShares'] += numOfShares
     # add claimed rewards to stake amount and claim the rewards
-    # stakeAmount = amount + VaultBalances['claimedRewards']
-    # print(stakeAmount)
     VaultBalances['Q'] += VaultBalances['claimedRewards']
     VaultBalances['claimedRewards'] = VaultBalances['rewards']
     VaultBalances['rewards'] = 0
     # Update Q and stake&restake if necessary
-    # Q += stakeAmount
     if(VaultBalances['Q'] >= S):
          stakeAndRestake(VaultBalances['Q'] - mid)
     return
 
 def withdraw(name, amount):
-    # global Q, VaultBalances['TotalShares'], VaultBalances['claimedRewards'], rewards
     # Decrease user's shares
     numOfShares = amount / sharePx()
     users[name] -= numOfShares
@@ -98,7 +88,6 @@ def withdraw(name, amount):
     VaultBalances['TotalShares'] += numOfShares
     # sub claimed rewards from unstake amount and claim the rewards
     unstakeAmount = amount - VaultBalances['claimedRewards']
-    # amount -= VaultBalances['claimedRewards']
     VaultBalances['claimedRewards'] = VaultBalances['rewards']
     VaultBalances['rewards'] = 0
     # update Q and unstake if necessary
@@ -111,12 +100,10 @@ def withdraw(name, amount):
     return
 
 def time_pass(days):
-    # global rewards
     VaultBalances['rewards'] += VaultBalances['V'] * XPY(days)
     return
 
 def initialisation():
-    # global VaultBalances['TotalShares']
     numOfShares = (VaultBalances['V'] + VaultBalances['Q']) / sharePx()
     users['Treasury'] = numOfShares
     VaultBalances['TotalShares'] = numOfShares
@@ -150,5 +137,5 @@ withdraw('Jack',10000)
 show_state()
 
 #%%
-time_pass(365)
+time_pass(30)
 show_state()
