@@ -6,14 +6,14 @@ unstakeFee = 15 # MATIC
 
 # Adjustable constants
 S = 30000                   # Stake threshold
-U = 0                       # Unstake threshold
+U = 1500                    # Unstake threshold
 fee = 0.5                   # Fee on rewards
 # fee = (S+U) / (4*S+2*U)   # Fee on rewards
-Q_init = U + 1500           # Queueing vault
+Q_init = U                  # Queueing vault
 V_init = S                  # Validator vault
 
 # Simulation parameters
-mid = (S + U) / 2
+# mid = (S + U) / 2
 users = {}
 VaultBalances = {"Q": Q_init, 
                  "V": V_init,
@@ -79,7 +79,7 @@ def deposit(name, amount, verbose=False):
     VaultBalances['rewards'] = 0
     # Update Q and stake&restake if necessary
     if(VaultBalances['Q'] >= S):
-         stakeAndRestake(VaultBalances['Q'] - mid)
+         stakeAndRestake(VaultBalances['Q'] - U)
     return
 
 def withdraw(name, amount, verbose=False):
@@ -98,8 +98,8 @@ def withdraw(name, amount, verbose=False):
     VaultBalances['claimedRewards'] = VaultBalances['rewards']
     VaultBalances['rewards'] = 0
     # update Q and unstake if necessary
-    if (VaultBalances['Q'] - unstakeAmount < U):
-        unstake(mid - VaultBalances['Q'] + unstakeAmount)
+    if (VaultBalances['Q'] - unstakeAmount < 0):
+        unstake(U - VaultBalances['Q'] + unstakeAmount)
         # Note: this will take 80 epochs (2-3 days)
         VaultBalances['Q'] -= unstakeAmount
     else:
