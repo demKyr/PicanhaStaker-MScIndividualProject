@@ -74,8 +74,10 @@ def show_state():
     print('|Total shares:',VaultBalances["TotalShares"])
     print('|Shares:',shares)
     print('|Balances from shares',{k:round(v*sharePx(),2) for k, v in shares.items()})
-    print('|Deposit queue:',Dbatches.Q[Dbatches.last].requests)
-    print('|Withdraw queue:',Wbatches.Q[Wbatches.last].requests)
+    # print('|Deposit queue:',Dbatches.Q[Dbatches.last].requests)
+    # print('|Withdraw queue:',Wbatches.Q[Wbatches.last].requests)
+    print('|Deposit queue:', *((Dbatches.Q[idx].requests) for idx in Dbatches.Q), sep='\n                ')
+    print('|Withdraw queue:', *((Wbatches.Q[idx].requests) for idx in Wbatches.Q), sep='\n                ')
     print('└----------------------------------------------------------------------------┘')
     return
 
@@ -86,8 +88,6 @@ def claimRewards():
     return
 
 
-def restake():
-    return
 
 def stake(Dbatch):
     currentSharePx = sharePx()
@@ -100,7 +100,6 @@ def stake(Dbatch):
         else:
             shares[user] = numOfShares
         VaultBalances['TotalShares'] += numOfShares
-
         
     # mint shares from claimed rewards
     numOfShares = VaultBalances['claimedRewards'] * fee / currentSharePx
@@ -141,13 +140,14 @@ def expiryCheck():
 
 
 def pairBatches(Dbatch, Wbatch):
+    currentSharePx = sharePx()
     for (user, amount) in Wbatch.requests:
         preshares[user] -= amount
         # tranfer amount to user but keep unstake fee 0.1% of amount
         VaultBalances["VaultAmount"] -= amount * (1 - withdrawFee)
     for (user, amount) in Dbatch.requests:
         preshares[user] -= amount
-        numOfShares = amount / sharePx()
+        numOfShares = amount / currentSharePx
         if user in shares:
             shares[user] += numOfShares
         else:
@@ -168,10 +168,12 @@ def batchComplete():
 def deposit(user, amount):
     # Add deposit fee 0.1% of amount
     VaultBalances["VaultAmount"] += amount * (1 + depositFee)
+    # give preshares to user
     if user in preshares:
         preshares[user] += amount
     else:
         preshares[user] = amount
+    # add user's deposit request
     if(amount + Dbatches.Q[Dbatches.last].balance <= batchSize):
         Dbatches.Q[Dbatches.last].requests.append([user, amount])
         Dbatches.Q[Dbatches.last].balance += amount
@@ -189,10 +191,14 @@ def deposit(user, amount):
 
 
 def withdraw(user, amount):
-    numOfShares = amount / sharePx()
-    shares[user] -= numOfShares
-    VaultBalances['TotalShares'] -= numOfShares
-    preshares[user] += amount
+    # if user's preshares are not enough swap user's shares for preshares (to stop reward accumulation)
+    if amount > preshares[user]:
+        swapAmount = amount - preshares[user]
+        numOfShares = swapAmount / sharePx()
+        shares[user] -= numOfShares
+        VaultBalances['TotalShares'] -= numOfShares
+        preshares[user] += swapAmount
+
     if(amount + Wbatches.Q[Wbatches.last].balance <= batchSize):
         Wbatches.Q[Wbatches.last].requests.append([user, amount])
         Wbatches.Q[Wbatches.last].balance += amount
@@ -229,10 +235,9 @@ def initialisation():
     print('batchSize',batchSize)
     print('timestamp',datetime.fromtimestamp(currentTimestamp))
     shares['Treasury'] = 0
-    show_state()
 
 
-#%%
+#%% Test 1
 initialisation()
 for i in range(20):
     deposit('user'+str(int(i/2)), 1000)
@@ -245,7 +250,24 @@ show_state()
 for i in range(20):
     deposit('user'+str(int(i/2)), 1000)
 time_pass(10, True)
+show_state()
 expiryCheck()
+show_state()
+
+
+
+#%% Test 2
+initialisation()
+for i in range(20):
+    deposit('user'+str(int(i/2)), 1000)
+show_state()
+time_pass(10, True)
+expiryCheck()
+show_state()
+time_pass(90, True)
+show_state()
+for i in range(20):
+    withdraw('user'+str(int(i/2)), 1000)
 show_state()
 
 
