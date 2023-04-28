@@ -48,9 +48,6 @@ def XPY (days):
 def sharePx():
     if(VaultBalances['TotalShares'] == 0):
         return 1
-    if(VaultBalances["ValidatorAmount"] + (VaultBalances['claimedRewards'] + VaultBalances["rewards"]) * (1-fee)) == 0:
-        print('|PreShares:',preshares)
-        print('|Shares:',shares)
     return (VaultBalances["ValidatorAmount"] + (VaultBalances['claimedRewards'] + VaultBalances["rewards"]) * (1-fee)) / VaultBalances["TotalShares"]
 
 
