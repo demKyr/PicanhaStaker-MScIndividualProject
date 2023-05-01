@@ -235,7 +235,7 @@ def initialisation():
     print('batchSize',batchSize)
     print('timestamp',datetime.fromtimestamp(currentTimestamp))
     shares['Treasury'] = 0
-
+  
 
 #%% Test 1
 initialisation()
