@@ -11,19 +11,13 @@ unstakeFee = 15 # MATIC
 currentTimestamp = datetime.timestamp(datetime.now())
 
 # Adjustable constants
-fee = 0.5                # Fee on rewards
+fee = 0.1                # Fee on rewards
 depositFee = 0.001 # 0.1%
 withdrawFee = 0.001 # 0.1%
-# batchSize = 15000 
-batchSize = max(stakeFee / depositFee, unstakeFee / withdrawFee)
+DqueueThreshold = stakeFee / depositFee
+WqueueThreshold = unstakeFee / withdrawFee
 expiryPeriod = 7 * 86400 # 7 days
 
-
-# class batch:
-#     def __init__(self):
-#         self.balance = 0
-#         self.expirydate = currentTimestamp + expiryPeriod
-#         self.requests = []
 
 class request:
     def __init__(self, user, amount):
@@ -77,8 +71,12 @@ def show_state():
     print('|Total shares:',VaultBalances["TotalShares"])
     print('|Shares:',shares)
     print('|Balances from shares',{k:round(v*sharePx(),2) for k, v in shares.items()})
+    print('|Deposit queue total:', VaultBalances["DqueueTotal"])
+    print('|Deposit queue:',[(Dqueue.Q[idx].user, Dqueue.Q[idx].amount) for idx in Dqueue.Q])
+    # print(*((Dbatches.Q[idx].requests) for idx in Dbatches.Q))
     # print('|Deposit queue:', *((Dbatches.Q[idx].requests) for idx in Dbatches.Q), sep='\n                ')
-    # print('|Withdraw queue:', *((Wbatches.Q[idx].requests) for idx in Wbatches.Q), sep='\n                ')
+    print('|Withdraw queue total:', VaultBalances["WqueueTotal"])
+    print('|Withdraw queue:',[(Wqueue.Q[idx].user, Wqueue.Q[idx].amount) for idx in Wqueue.Q])
     print('└----------------------------------------------------------------------------┘')
     return
 
@@ -89,110 +87,121 @@ def claimRewards():
     return
 
 
-
-def stake(Dbatch):
-    # currentSharePx = sharePx()
-    # print('Staking',Dbatch.balance,'...')
-    # for (user, amount) in Dbatch.requests:
-    #     preshares[user] -= amount
-    #     numOfShares = amount / currentSharePx
-    #     if user in shares:
-    #         shares[user] += numOfShares
-    #     else:
-    #         shares[user] = numOfShares
-    #     VaultBalances['TotalShares'] += numOfShares
-        
-    # # mint shares from claimed rewards
-    # numOfShares = VaultBalances['claimedRewards'] * fee / currentSharePx
-    # shares['Treasury'] += numOfShares
-    # VaultBalances['TotalShares'] += numOfShares
-    # # stake amount by pay stake fee using VaultAmount and restake claimed rewards
-    # VaultBalances["VaultAmount"] -= stakeFee
-    # VaultBalances["ValidatorAmount"] += (Dbatch.balance + VaultBalances['claimedRewards'])
-    # VaultBalances["VaultAmount"] -= Dbatch.balance 
-    # VaultBalances['claimedRewards'] = 0
-    # return
-
-
-def unstake(Wbatch):
-    # print('Unstaking',Wbatch.balance,'...')
-    # # unstake amount and pay unstake fee using VaultAmount
-    # VaultBalances["VaultAmount"] -= unstakeFee
-    # VaultBalances["ValidatorAmount"] -= Wbatch.balance
-    # VaultBalances["VaultAmount"] += Wbatch.balance
-    # for (user, amount) in Wbatch.requests:
-    #     preshares[user] -= amount
-    #     VaultBalances["VaultAmount"] -= amount
-    #     # transfer amount to user
-    # return
-
-
-def expiryCheck():
-    # if (not Dbatches.isEmpty() and Dbatches.Q[Dbatches.first].expirydate < currentTimestamp):
-    #     print('Deposit expired batch')
-    #     stake(Dbatches.Q[Dbatches.first])
-    #     Dbatches.dequeue()
-    #     expiryCheck()
-    # if (not Wbatches.isEmpty() and Wbatches.Q[Wbatches.first].expirydate < currentTimestamp):
-    #     print('Withdraw expired batch')
-    #     unstake(Wbatches.Q[Wbatches.first])
-    #     Wbatches.dequeue()
-    #     expiryCheck()
-
-def totalDAmountCheck():
+def vaultInjection(amount):
+    VaultBalances['VaultAmount'] += amount
     return
+
+
+# THIS POSES A THREAT, CALLER CAN WITHDRAW EVEYRYTHING FROM THE VAULT
+def vaultLeakage(amount):
+    VaultBalances['VaultAmount'] -= amount
+    return
+
+
+def stake():
+    # stake everything in Dqueue, delete preshares, create shares for the users, clear Dqueue
+    currentSharePx = sharePx()
+    while(not Dqueue.isEmpty()):
+        req = Dqueue.dequeue()
+        preshares[req.user] -= req.amount
+        numOfShares = req.amount / currentSharePx
+        if req.user in shares:
+            shares[req.user] += numOfShares
+        else:
+            shares[req.user] = numOfShares
+        VaultBalances['TotalShares'] += numOfShares
+    # mint shares from claimed rewards
+    numOfShares = VaultBalances['claimedRewards'] * fee / currentSharePx
+    shares['Treasury'] += numOfShares
+    VaultBalances['TotalShares'] += numOfShares
+    # stake contents of Dqueue by pay stake fee using VaultAmount and restake claimed rewards
+    print("Staking", VaultBalances['DqueueTotal'], "MATIC")
+    VaultBalances["VaultAmount"] -= stakeFee
+    VaultBalances["ValidatorAmount"] += (VaultBalances['DqueueTotal'] + VaultBalances['claimedRewards'])
+    VaultBalances["VaultAmount"] -= VaultBalances['DqueueTotal']
+    VaultBalances['DqueueTotal'] = 0
+    VaultBalances['claimedRewards'] = 0
+    return
+
+
+def unstake():
+    # unstake everything in Wqueue and delete shares for the users, clear Wqueue
+    print ("Unstaking", VaultBalances['WqueueTotal'], "MATIC")
+    currentSharePx = sharePx()
+    VaultBalances['VaultAmount'] -= unstakeFee
+    VaultBalances['ValidatorAmount'] -= VaultBalances['WqueueTotal']
+    VaultBalances['VaultAmount'] += VaultBalances['WqueueTotal']
+    VaultBalances['WqueueTotal'] = 0
+    while(not Wqueue.isEmpty()):
+        req = Wqueue.dequeue()
+        numOfShares = req.amount / currentSharePx
+        shares[req.user] -= numOfShares
+        VaultBalances['TotalShares'] -= numOfShares
+        # Transfer amount to user
+        VaultBalances['VaultAmount'] -= req.amount
+    return
+
 
 def pairQueues():
     if (Dqueue.isEmpty() or Wqueue.isEmpty()):
         return
+    # tranfer amount from Dqueue.Q[Dqueue.first].user to Wqueue.Q[Wqueue.first].user
+    #   ie transfer shares from Dqueue.Q[Dqueue.first].user to Wqueue.Q[Wqueue.first].user
+    #   also delete preshares of Dqueue.Q[Dqueue.first].user
+    #   and transfer amount from VaultAmount to Wqueue.Q[Wqueue.first].user
+    amount = min(Dqueue.Q[Dqueue.first].amount, Wqueue.Q[Wqueue.first].amount)
+    numOfShares = amount / sharePx()
+    shares[Wqueue.Q[Wqueue.first].user] -= numOfShares
+    shares[Dqueue.Q[Dqueue.first].user] += numOfShares
+    preshares[Dqueue.Q[Dqueue.first].user] -= amount
+    VaultBalances["VaultAmount"] -= amount * (1 - depositFee)
+    VaultBalances["DqueueTotal"] -= amount
+    VaultBalances["WqueueTotal"] -= amount
     if (Dqueue.Q[Dqueue.first].amount < Wqueue.Q[Wqueue.first].amount):
-        # tranfer amount from Dqueue.Q[Dqueue.first].user to Wqueue.Q[Wqueue.first].user
-        #   ie transfer shares from Dqueue.Q[Dqueue.first].user to Wqueue.Q[Wqueue.first].user
-        #   also delete preshares of Dqueue.Q[Dqueue.first].user
-        #   and transfer amount from VaultAmount to Wqueue.Q[Wqueue.first].user
-        amount = Dqueue.Q[Dqueue.first].amount
-        numOfShares = amount / sharePx()
-        shares[Wqueue.Q[Wqueue.first].user] -= numOfShares
-        shares[Dqueue.Q[Dqueue.first].user] += numOfShares
-        preshares[Dqueue.Q[Dqueue.first].user] -= amount
-        VaultBalances["VaultAmount"] -= amount
         Wqueue.Q[Wqueue.first].amount -= amount
         Dqueue.dequeue()
-
+    elif (Dqueue.Q[Dqueue.first].amount > Wqueue.Q[Wqueue.first].amount):
+        Dqueue.Q[Dqueue.first].amount -= amount
+        Wqueue.dequeue()
+    elif (Dqueue.Q[Dqueue.first].amount == Wqueue.Q[Wqueue.first].amount):
+        Wqueue.dequeue()
         Dqueue.dequeue()
-        pairQueues()
-        return
-    return
-
-def pairBatches(Dbatch, Wbatch):
-    # currentSharePx = sharePx()
-    # for (user, amount) in Wbatch.requests:
-    #     preshares[user] -= amount
-    #     # tranfer amount to user but keep unstake fee 0.1% of amount
-    #     VaultBalances["VaultAmount"] -= amount * (1 - withdrawFee)
-    # for (user, amount) in Dbatch.requests:
-    #     preshares[user] -= amount
-    #     numOfShares = amount / currentSharePx
-    #     if user in shares:
-    #         shares[user] += numOfShares
-    #     else:
-    #         shares[user] = numOfShares
-    #     VaultBalances['TotalShares'] += numOfShares
+    pairQueues()
     return
 
 
-def batchComplete():
-    # if (Wbatches.isEmpty() or Dbatches.isEmpty()):
-    #     return
-    # pairBatches(Dbatches.Q[Dbatches.first], Wbatches.Q[Wbatches.first])
-    # Dbatches.dequeue()
-    # Wbatches.dequeue()
-    # return
+def reduceDRequests(user, amount):
+    # find user's deposit requests and reduce them by amount starting by the oldest one
+    idx = Dqueue.first
+    remainingAmount = amount
+    while (idx != Dqueue.last and remainingAmount > 0):
+        if (Dqueue.Q[idx].user == user):
+            if (Dqueue.Q[idx].amount > remainingAmount):
+                remainingAmount = 0
+                Dqueue.Q[idx].amount -= remainingAmount
+            else:
+                remainingAmount -= Dqueue.Q[idx].amount
+                Dqueue.Q[idx].amount = 0
+        idx += 1
+
+    return 
+
+
+def expiryCheck():
+    if(not Dqueue.isEmpty() and Dqueue.Q[Dqueue.first].expirydate < currentTimestamp):
+        print('Deposit expired request')
+        stake()
+    if(not Wqueue.isEmpty() and Wqueue.Q[Wqueue.first].expirydate < currentTimestamp):
+        print('Withdraw expired request')
+        unstake()
+    return
 
 
 def deposit(user, amount):
+    claimRewards()
     # Add deposit fee 0.1% of amount
-    VaultBalances["VaultAmount"] += amount * (1 + depositFee)
+    VaultBalances['VaultAmount'] += amount * (1 + depositFee)
+    VaultBalances["DqueueTotal"] += amount 
     # give preshares to user
     if user in preshares:
         preshares[user] += amount
@@ -204,73 +213,119 @@ def deposit(user, amount):
     # true if D queue is active or both queues are empty
     if (Wqueue.isEmpty):
         # check if oldest request in the D queue is expired OR total amount in D queue reached threshold
+        if(VaultBalances["DqueueTotal"] >= DqueueThreshold):
+            stake()
         expiryCheck()
-        totalDAmountCheck()
     # true if W queue is active
     else:
+        # net queues and check if oldest request in the D queue is expired
         pairQueues()
-
-
-    # add user's deposit request
-    if(amount + Dbatches.Q[Dbatches.last].balance <= batchSize):
-        Dbatches.Q[Dbatches.last].requests.append([user, amount])
-        Dbatches.Q[Dbatches.last].balance += amount
-    else:
-        freeSpace = batchSize - Dbatches.Q[Dbatches.last].balance
-        Dbatches.Q[Dbatches.last].requests.append([user, freeSpace])
-        Dbatches.Q[Dbatches.last].balance += freeSpace
-        batchComplete()
-        Dbatches.enqueue(batch())
-        Dbatches.Q[Dbatches.last].requests.append([user, amount - freeSpace])
-        Dbatches.Q[Dbatches.last].balance += amount - freeSpace
-    claimRewards()
-    expiryCheck()
+        expiryCheck()
     return
 
 
 def withdraw(user, amount):
-    # if user's preshares are not enough swap user's shares for preshares (to stop reward accumulation)
-    if amount > preshares[user]:
-        swapAmount = amount - preshares[user]
-        numOfShares = swapAmount / sharePx()
-        shares[user] -= numOfShares
-        VaultBalances['TotalShares'] -= numOfShares
-        preshares[user] += swapAmount
-
-    if(amount + Wbatches.Q[Wbatches.last].balance <= batchSize):
-        Wbatches.Q[Wbatches.last].requests.append([user, amount])
-        Wbatches.Q[Wbatches.last].balance += amount
+    claimRewards()                
+    # check if user has preshares (use all preshares before using shares for withdrawal)
+    if (preshares[user]):
+        # if amount == preshares    ->  transfer amount to user, clear preshares, remove deposit request(s) (set amount to 0)
+        # if amount < preshares     ->  transfer amount to user, reduce number of preshares and reduce amount of deposit request(s)
+        # if amount > preshares     ->  transfer amount from preshares to user, clear preshares and remove deposit request(s) , set new withdraw request
+        tempAmount = min(amount, preshares[user])
+        VaultBalances["VaultAmount"] -= tempAmount * (1 + depositFee)
+        VaultBalances["DqueueTotal"] -= tempAmount
+        preshares[user] -= tempAmount
+        reduceDRequests(user, tempAmount)
+        if (preshares[user] >= amount):
+            return
+        elif (preshares[user] < amount):
+            newRequest = request(user, amount - tempAmount)
     else:
-        freeSpace = batchSize - Wbatches.Q[Wbatches.last].balance
-        Wbatches.Q[Wbatches.last].requests.append([user, freeSpace])
-        Wbatches.Q[Wbatches.last].balance += freeSpace
-        batchComplete()
-        Wbatches.enqueue(batch())
-        Wbatches.Q[Wbatches.last].requests.append([user, amount - freeSpace])
-        Wbatches.Q[Wbatches.last].balance += amount - freeSpace
-    claimRewards()
-    expiryCheck()
+        newRequest = request(user, amount)
+    Wqueue.enqueue(newRequest)
+    VaultBalances["WqueueTotal"] += newRequest.amount
+    if (Dqueue.isEmpty):
+        if(VaultBalances["WqueueTotal"] >= WqueueThreshold):
+            unstake()
+        expiryCheck()
+    else:
+        pairQueues()
+        expiryCheck()
     return
 
+
+def directDeposit(user, amount):
+    claimRewards()
+    # Add stake fee as deposit fee 
+    VaultBalances['VaultAmount'] += amount + stakeFee
+    VaultBalances["DqueueTotal"] += amount 
+    # give preshares to user
+    if user in preshares:
+        preshares[user] += amount
+    else:
+        preshares[user] = amount
+    # add user's deposit request to the D queue
+    newRequest = request(user, amount)
+    Dqueue.enqueue(newRequest)
+    # if Wqueue is not empty pair the queues
+    if(not Wqueue.isEmpty()):
+        pairQueues()
+    # if Wqueue is empty after pairing, stake and clear Dqueue
+    if (Wqueue.isEmpty):
+        stake()
+    return
+
+
+def directWithdraw(user, amount):
+    claimRewards()                
+    # check if user has preshares (use all preshares before using shares for withdrawal)
+    if (preshares[user]):
+        # if amount == preshares    ->  transfer amount to user, clear preshares, remove deposit request(s) (set amount to 0)
+        # if amount < preshares     ->  transfer amount to user, reduce number of preshares and reduce amount of deposit request(s)
+        # if amount > preshares     ->  transfer amount from preshares to user, clear preshares and remove deposit request(s) , set new withdraw request
+        tempAmount = min(amount, preshares[user])
+        VaultBalances["VaultAmount"] -= tempAmount + unstakeFee
+        VaultBalances["DqueueTotal"] -= tempAmount
+        preshares[user] -= tempAmount
+        reduceDRequests(user, tempAmount)
+        if (preshares[user] >= amount):
+            return
+        elif (preshares[user] < amount):
+            newRequest = request(user, amount - tempAmount)
+    else:
+        newRequest = request(user, amount)
+    Wqueue.enqueue(newRequest)
+    VaultBalances["WqueueTotal"] += newRequest.amount
+    # if Dqueue is not empty pair the queues 
+    if(not Dqueue.isEmpty()):
+        pairQueues()
+    # if Dqueue is empty after pairing, unstake and clear Wqueue
+    if (Dqueue.isEmpty):
+        unstake()
+    return
+
+
 def initialisation():
-    global Dbatches, Wbatches, shares, preshares, VaultBalances, currentTimestamp 
+    global Dqueue, Wqueue, shares, preshares, VaultBalances, currentTimestamp 
     currentTimestamp = datetime.timestamp(datetime.now())
-    Dbatches = queue()
-    Dbatches.enqueue(batch())
-    Wbatches = queue()
-    Wbatches.enqueue(batch())
+    Dqueue = queue()
+    Wqueue = queue()
     shares = {}
     preshares = {}
     VaultBalances = {"ValidatorAmount": 0, 
-                    "VaultAmount": 0,
-                    "rewards": 0,
-                    "claimedRewards":0,
-                    "TotalShares":0
+                     "VaultAmount": 0,
+                     "rewards": 0,
+                     "claimedRewards":0,
+                     "TotalShares":0,
+                     "DqueueTotal":0,
+                     "WqueueTotal":0
                     }
+    vaultInjection(1000)
     print('fee',fee)
     print('depositFee',depositFee)
     print('withdrawFee',withdrawFee)
-    print('batchSize',batchSize)
+    print('DqueueThreshold',DqueueThreshold)
+    print('WqueueThreshold',WqueueThreshold)
     print('timestamp',datetime.fromtimestamp(currentTimestamp))
     shares['Treasury'] = 0
 
@@ -307,5 +362,10 @@ show_state()
 for i in range(20):
     withdraw('user'+str(int(i/2)), 1000)
 show_state()
+time_pass(10, True)
+expiryCheck()
+show_state()
+
+
 
 
