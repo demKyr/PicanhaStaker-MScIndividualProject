@@ -25,6 +25,12 @@ class queue:
             return True
         else:
             return False
+        
+    def clear(self):
+        self.Q = {}
+        self.first = 1      # !!!! might not work in Solidity
+        self.last = 0       # !!!! might not work in Solidity
+        return
 
 
 
