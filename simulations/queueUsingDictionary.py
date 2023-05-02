@@ -21,7 +21,7 @@ class queue:
         return data
     
     def isEmpty(self):
-        if self.first >= self.last: # if queue has one element, it is the current => it is empty
+        if self.first > self.last: # if queue has one element, it is the current => it is empty
             return True
         else:
             return False
