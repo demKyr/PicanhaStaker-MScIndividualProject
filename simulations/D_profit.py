@@ -97,7 +97,7 @@ def update(val):
 
     profitsFromRewards, vaultBalance = approachDsim(initialAmountInValidator_slider.val, dailyDeposits_slider.val, dailyWithdrawals_slider.val)
 
-    ax.set_ylim(-10, 1.05 * max (max(profitsFromRewards), max(vaultBalance)))
+    ax.set_ylim(min(-10, min(vaultBalance)), 1.05 * max (max(profitsFromRewards), max(vaultBalance)))
     line1.set_ydata(profitsFromRewards)
     line2.set_ydata(vaultBalance)
     

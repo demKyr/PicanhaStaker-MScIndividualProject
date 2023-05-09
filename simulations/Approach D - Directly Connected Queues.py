@@ -20,10 +20,11 @@ expiryPeriod = 7 * 86400 # 7 days
 
 
 class request:
-    def __init__(self, user, amount):
+    def __init__(self, user, amount, isDirectWithdraw = False):
         self.user = user
         self.amount = amount
         self.expirydate = currentTimestamp + expiryPeriod
+        self.isDirectWithdraw = isDirectWithdraw
 
 
 # Simulation parameters
@@ -141,8 +142,12 @@ def unstake():
         shares[req.user] -= numOfShares
         VaultBalances['TotalShares'] -= numOfShares
         # Transfer amount to user
-        print('Transfer', req.amount, 'MATIC to', req.user)
-        VaultBalances['VaultAmount'] -= req.amount
+        if(req.isDirectWithdraw):
+            print('Transfer', req.amount, 'MATIC to', req.user)
+            VaultBalances['VaultAmount'] -= req.amount
+        else:
+            print('Transfer', req.amount * (1 - withdrawFee), 'MATIC to', req.user)
+            VaultBalances['VaultAmount'] -= req.amount * (1-withdrawFee)
     return
 
 
@@ -161,8 +166,12 @@ def pairQueues():
     else:
         shares[Dqueue.Q[Dqueue.first].user] = numOfShares
     preshares[Dqueue.Q[Dqueue.first].user] -= amount
-    print('Transfer', amount * (1 - depositFee) , 'MATIC to', Wqueue.Q[Wqueue.first].user)
-    VaultBalances["VaultAmount"] -= amount * (1 - depositFee)
+    if(Wqueue.Q[Wqueue.first].isDirectWithdraw):
+        print('Transfer', amount, 'MATIC to', Wqueue.Q[Wqueue.first].user)
+        VaultBalances["VaultAmount"] -= amount
+    else:
+        print('Transfer', amount * (1 - withdrawFee) , 'MATIC to', Wqueue.Q[Wqueue.first].user)
+        VaultBalances["VaultAmount"] -= amount * (1 - depositFee)
     VaultBalances["DqueueTotal"] -= amount
     VaultBalances["WqueueTotal"] -= amount
     if (Dqueue.Q[Dqueue.first].amount < Wqueue.Q[Wqueue.first].amount):
@@ -242,11 +251,11 @@ def withdraw(user, amount):
         return           
     # check if user has preshares (use all preshares before using shares for withdrawal)
     if (preshares[user]):
-        # if amount == preshares    ->  transfer amount to user, clear preshares, remove deposit request(s) (set amount to 0)
-        # if amount < preshares     ->  transfer amount to user, reduce number of preshares and reduce amount of deposit request(s)
-        # if amount > preshares     ->  transfer amount from preshares to user, clear preshares and remove deposit request(s) , set new withdraw request
+        # if amount == preshares    ->  transfer amount * (1-withdrawFee) to user, clear preshares, remove deposit request(s) (set amount to 0)
+        # if amount < preshares     ->  transfer amount * (1-withdrawFee) to user, reduce number of preshares and reduce amount of deposit request(s)
+        # if amount > preshares     ->  transfer amount * (1-withdrawFee) from preshares to user, clear preshares and remove deposit request(s) , set new withdraw request
         tempAmount = min(amount, preshares[user])
-        VaultBalances["VaultAmount"] -= tempAmount * (1 + depositFee)
+        VaultBalances["VaultAmount"] -= tempAmount * (1 - withdrawFee)
         VaultBalances["DqueueTotal"] -= tempAmount
         if (preshares[user] >= amount):
             preshares[user] -= tempAmount
@@ -297,13 +306,15 @@ def directWithdraw(user, amount):
     if(amount > shares[user] * sharePx() + preshares[user]):
         print('Transaction Reverted: Insufficient Funds')
         return 
+    # user pays the unstake fee
+    VaultBalances["VaultAmount"] += unstakeFee
     # check if user has preshares (use all preshares before using shares for withdrawal)
     if (preshares[user]):
         # if amount == preshares    ->  transfer amount to user, clear preshares, remove deposit request(s) (set amount to 0)
         # if amount < preshares     ->  transfer amount to user, reduce number of preshares and reduce amount of deposit request(s)
         # if amount > preshares     ->  transfer amount from preshares to user, clear preshares and remove deposit request(s) , set new withdraw request
         tempAmount = min(amount, preshares[user])
-        VaultBalances["VaultAmount"] -= tempAmount + unstakeFee
+        VaultBalances["VaultAmount"] -= tempAmount
         VaultBalances["DqueueTotal"] -= tempAmount
         if (preshares[user] >= amount):
             preshares[user] -= tempAmount
@@ -312,9 +323,9 @@ def directWithdraw(user, amount):
         elif (preshares[user] < amount):
             preshares[user] -= tempAmount
             reduceDRequests(user, tempAmount)
-            newRequest = request(user, amount - tempAmount)
+            newRequest = request(user, amount - tempAmount, isDirectWithdraw=True)
     else:
-        newRequest = request(user, amount)
+        newRequest = request(user, amount, isDirectWithdraw=True)
     Wqueue.enqueue(newRequest)
     VaultBalances["WqueueTotal"] += newRequest.amount
     # if Dqueue is not empty pair the queues 
@@ -407,6 +418,8 @@ deposit('Alice', 1000)
 time_pass(10, True)
 expiryCheck()
 deposit('Bob', 1000)
+show_state()
+
 withdraw('Alice',500)
 show_state()
 
@@ -438,11 +451,11 @@ expiryCheck()
 #%% 
 deposit('Alice', 1500)
 #%% 
-withdraw('Alice',1000)
+withdraw('Alice',10000)
 #%% 
 directDeposit('Alice', 10000)
 #%% 
-directWithdraw('Alice', 2002)
+directWithdraw('Alice', 3002)
 #%% 
 deposit('Bob', 10000)
 #%%
