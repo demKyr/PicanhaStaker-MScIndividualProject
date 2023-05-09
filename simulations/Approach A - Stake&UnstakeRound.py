@@ -80,8 +80,8 @@ for i in range(1, NumberofMonths + 1):
     ownerProfits_from_deposits.append(ownerProfits_from_deposits[i-1] + rewards_from_deposits * ownerFeePerc)
     print('Total deposit:', round(totalDeposits,2), 'MATIC')
 
-    # Profit from restaking SUFmax every month
-    rewards_from_SUFmax = SUFmax * XPY(DPY, 27)
+    # Profit from the staked SUFmax every month
+    rewards_from_SUFmax = SUFmax * XPY(DPY, 30)
 
     # Loss from unstaking fee 
     losses_from_unstaking_fee.append(unstakeFee - newMonthlyWithdrawals * userUnstakeFeePerc) # if losses_from_unstaking_fee[i] < 0 we take the profit
