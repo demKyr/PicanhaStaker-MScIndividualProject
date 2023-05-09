@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider, Button
-from C_importer import ApproachC
+from Cv2_importer import ApproachC
 
 
 # Non-adjustable constants
