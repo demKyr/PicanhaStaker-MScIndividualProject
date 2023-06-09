@@ -45,11 +45,16 @@ def approachDsim(initialAmountInValidator, dailyDeposits, dailyWithdrawals):
 fig, ax = plt.subplots()
 profitsFromRewards, StakingEOABalance = approachDsim(initialAmountInValidatorInit, dailyDepositsInit, dailyWithdrawalsInit)
 line1, = ax.plot(t, profitsFromRewards, lw=2, label = "Profit from rewards")
-line2, = ax.plot(t, StakingEOABalance, lw=2, label = "Staking EOA balance")
-ax.set_ylabel('Profit [MATIC]')
-ax.set_xlabel('Deposit [MATIC]')
+line2, = ax.plot(t, StakingEOABalance, lw=2, label = "Profit from deposit/withdrawal fee")
+
+ax.set_title('Approach D: protocol\'s profit wrt time', fontsize=20)
+ax.set_ylabel('Profit [MATIC]', fontsize=16)
+ax.set_xlabel('Deposit [MATIC]', fontsize=16)
 # ax.set_ylim(-40, 1500)
+ax.set_ylim(-10, 1500)
 ax.axhline(y = 0, color = 'y', linestyle = '--')
+ax.tick_params(axis='both', which='major', labelsize=16)
+
 
 # adjust the main plot to make room for the sliders
 fig.subplots_adjust(bottom=0.4)
@@ -65,6 +70,8 @@ initialAmountInValidator_slider = Slider(
     valinit=initialAmountInValidatorInit,
     valstep=500,
 )
+initialAmountInValidator_slider.label.set_fontsize(16)
+initialAmountInValidator_slider.valtext.set_fontsize(16)
 
 # Make a horizontal slider to control dailyDeposits
 axDailyDeposits = fig.add_axes([0.25, 0.15, 0.65, 0.03])
@@ -76,6 +83,8 @@ dailyDeposits_slider = Slider(
     valinit=dailyDepositsInit,
     valstep=500,
 )
+dailyDeposits_slider.label.set_fontsize(16)
+dailyDeposits_slider.valtext.set_fontsize(16)
 
 # Make a horizontal slider to control dailyWithdrawals
 axDailyWithdrawals = fig.add_axes([0.25, 0.2, 0.65, 0.03])
@@ -87,6 +96,8 @@ dailyWithdrawals_slider = Slider(
     valinit=dailyWithdrawalsInit,
     valstep=500,
 )
+dailyWithdrawals_slider.label.set_fontsize(16)
+dailyWithdrawals_slider.valtext.set_fontsize(16)
 
 
 
@@ -98,7 +109,8 @@ def update(val):
 
     profitsFromRewards, StakingEOABalance = approachDsim(initialAmountInValidator_slider.val, dailyDeposits_slider.val, dailyWithdrawals_slider.val)
 
-    ax.set_ylim(min(-10, min(StakingEOABalance)), 1.05 * max (max(profitsFromRewards), max(StakingEOABalance)))
+    # ax.set_ylim(min(-10, min(StakingEOABalance)), 1.05 * max (max(profitsFromRewards), max(StakingEOABalance)))
+    ax.set_ylim(-10, 1500)
     line1.set_ydata(profitsFromRewards)
     line2.set_ydata(StakingEOABalance)
     
@@ -125,7 +137,7 @@ textstr = '\n'.join((
 props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 
 # place a text box in upper left in axes coords
-ax.text(0.05, 0.95, textstr, transform=ax.transAxes, fontsize=14,
+ax.text(0.05, 0.95, textstr, transform=ax.transAxes, fontsize=18,
         verticalalignment='top', bbox=props)
 
 
@@ -135,5 +147,5 @@ def reset(event):
     dailyWithdrawals_slider.reset()
 button.on_clicked(reset)
 
-ax.legend(loc='upper right')
+ax.legend(loc='upper right', fontsize=18)
 plt.show()

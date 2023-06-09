@@ -11,10 +11,10 @@ num_of_days = 365
 truStakeFee = 0.1 
 
 # Simulation parameters
-Sinit=30000
+Sinit=10000
 Uinit=1500
 init_newDeposit = 15000 # MATIC
-init_smallStakeFee = 0.5 # 20%
+init_smallStakeFee = 20 # 20%
 min_newDeposit = 0
 max_newDeposit = 30000
 
@@ -43,13 +43,16 @@ t = np.linspace(0, num_of_days, num_of_days)
 
 # Create the figure and the line that we will manipulate
 fig, ax = plt.subplots()
-line1, = ax.plot(t, simpleStaking(t, Sinit, Uinit), lw=2, label = "Simple staking")
-line2, = ax.plot(t, approachB(t, Sinit, Uinit, init_newDeposit, init_smallStakeFee), lw=2, label = "Approach B")
-ax.set_ylabel('Profit [MATIC]')
-ax.set_xlabel('Time [days]')
+line1, = ax.plot(t, simpleStaking(t, Sinit, Uinit), lw=2, label = "Simple staking of initial capital (S + U)", linestyle = '--')
+line2, = ax.plot(t, approachB(t, Sinit, Uinit, init_newDeposit, init_smallStakeFee/100), lw=2, label = "Approach B")
+
+ax.set_title('Approach B: protocol\'s profit wrt time', fontsize=20)
+ax.set_ylabel('Profit [MATIC]', fontsize=16)
+ax.set_xlabel('Time [days]', fontsize=16)
 ax.set_ylim(-40, 1500)
 ax.axhline(y = 0, color = 'y', linestyle = '--')
-ax.axhline(y = stakeFee + unstakeFee, color = 'r', linestyle = '--')
+# ax.axhline(y = stakeFee + unstakeFee, color = 'r', linestyle = '--')
+ax.tick_params(axis='both', which='major', labelsize=16)
 
 # adjust the main plot to make room for the sliders
 fig.subplots_adjust(bottom=0.4)
@@ -59,23 +62,27 @@ fig.subplots_adjust(bottom=0.4)
 axS = fig.add_axes([0.25, 0.1, 0.65, 0.03])
 S_slider = Slider(
     ax=axS,
-    label='S',
+    label='S [MATIC]',
     valmin=0,
     valmax=30000,
     valinit=Sinit,
     valstep=500,
 )
+S_slider.label.set_fontsize(16)
+S_slider.valtext.set_fontsize(16)
 
 # Make a horizontal slider to control U
 axU = fig.add_axes([0.25, 0.15, 0.65, 0.03])
 U_slider = Slider(
     ax=axU,
-    label='U',
+    label='U [MATIC]',
     valmin=0,
     valmax=30000,
     valinit=Uinit,
     valstep=500,
 )
+U_slider.label.set_fontsize(16)
+U_slider.valtext.set_fontsize(16)
 
 # Make a horizontal slider to control the deposit amount
 axdeposit = fig.add_axes([0.25, 0.2, 0.65, 0.03])
@@ -87,24 +94,28 @@ deposit_slider = Slider(
     valinit=init_newDeposit,
     valstep=500,
 )
+deposit_slider.label.set_fontsize(16)
+deposit_slider.valtext.set_fontsize(16)
 
 # Make a horizontal slider to control the smallStake fee
 axsmallStakefee = fig.add_axes([0.25, 0.25, 0.65, 0.03])
 smallStakeFee_slider = Slider(
     ax=axsmallStakefee,
-    label="SmallStake fee",
+    label="Fee on rewards [%]",
     valmin=0,
-    valmax=1,
+    valmax=100,
     valinit=init_smallStakeFee,
-    valstep=0.05,
+    valstep=5,
 )
+smallStakeFee_slider.label.set_fontsize(16)
+smallStakeFee_slider.valtext.set_fontsize(16)
 
 
 
 # The function to be called anytime a slider's value changes
 def update(val):
     line1.set_ydata(simpleStaking(t, S_slider.val, U_slider.val))
-    line2.set_ydata(approachB(t, S_slider.val, U_slider.val, deposit_slider.val, smallStakeFee_slider.val))
+    line2.set_ydata(approachB(t, S_slider.val, U_slider.val, deposit_slider.val, smallStakeFee_slider.val/100))
     
     fig.canvas.draw_idle()
 
@@ -130,7 +141,7 @@ textstr = '\n'.join((
 props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 
 # place a text box in upper left in axes coords
-ax.text(0.05, 0.95, textstr, transform=ax.transAxes, fontsize=14,
+ax.text(0.05, 0.95, textstr, transform=ax.transAxes, fontsize=18,
         verticalalignment='top', bbox=props)
 
 
@@ -141,5 +152,5 @@ def reset(event):
     smallStakeFee_slider.reset()
 button.on_clicked(reset)
 
-ax.legend(loc='upper right')
+ax.legend(loc='upper right', fontsize=18)
 plt.show()
