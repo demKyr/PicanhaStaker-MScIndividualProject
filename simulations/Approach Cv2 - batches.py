@@ -132,19 +132,20 @@ def unstake(Wbatch):
 def expiryCheck():
     if (not Dbatches.isEmpty() and Dbatches.Q[Dbatches.first].expirydate < currentTimestamp):
         print('Deposit expired batch')
-        while(not Dbatches.isEmpty()):
+        while(not Dbatches.isEmpty()): # since we are calling stake, we do it for all batches, even the non-expired
             stake(Dbatches.Q[Dbatches.first])
             Dbatches.dequeue()
         expiryCheck()
     if (not Wbatches.isEmpty() and Wbatches.Q[Wbatches.first].expirydate < currentTimestamp):
         print('Withdraw expired batch')
-        while(not Wbatches.isEmpty()):
+        while(not Wbatches.isEmpty()): # since we are calling unstake, we do it for all batches, even the non-expired
             unstake(Wbatches.Q[Wbatches.first])
             Wbatches.dequeue()
         expiryCheck()
 
 
 def pairBatches(Dbatch, Wbatch):
+    print("Pairing batches")
     currentSharePx = sharePx()
     for (user, amount) in Wbatch.requests:
         numOfShares = amount / currentSharePx
@@ -175,23 +176,30 @@ def deposit(user, amount):
     claimRewards()
     # Add deposit fee 0.1% of amount
     VaultBalances["VaultAmount"] += amount * (1 + depositFee)
-    # give preshares to user
-    if user in preshares:
-        preshares[user] += amount
-    else:
-        preshares[user] = amount
     # add user's deposit request
     if(amount + Dbatches.Q[Dbatches.last].balance <= batchSize):
+        # give preshares to user
+        if user in preshares:
+            preshares[user] += amount
+        else:
+            preshares[user] = amount
         Dbatches.Q[Dbatches.last].requests.append([user, amount])
         Dbatches.Q[Dbatches.last].balance += amount
     else:
         freeSpace = batchSize - Dbatches.Q[Dbatches.last].balance
+        # give preshares to user
+        if user in preshares:
+            preshares[user] += freeSpace
+        else:
+            preshares[user] = freeSpace
         Dbatches.Q[Dbatches.last].requests.append([user, freeSpace])
         Dbatches.Q[Dbatches.last].balance += freeSpace
-        batchComplete()
         Dbatches.enqueue(batch())
-        Dbatches.Q[Dbatches.last].requests.append([user, amount - freeSpace])
-        Dbatches.Q[Dbatches.last].balance += amount - freeSpace
+        batchComplete()
+        deposit(user, amount - freeSpace)
+        # Dbatches.Q[Dbatches.last].requests.append([user, amount - freeSpace])
+        # Dbatches.Q[Dbatches.last].balance += amount - freeSpace
+
     expiryCheck()
     return
 
@@ -211,22 +219,28 @@ def withdraw(user, amount):
             return
         
 
-    if user in unshares:
-        unshares[user] += amount
-    else:
-        unshares[user] = amount
 
     if(amount + Wbatches.Q[Wbatches.last].balance <= batchSize):
+        if user in unshares:
+            unshares[user] += amount
+        else:
+            unshares[user] = amount
         Wbatches.Q[Wbatches.last].requests.append([user, amount])
         Wbatches.Q[Wbatches.last].balance += amount
     else:
         freeSpace = batchSize - Wbatches.Q[Wbatches.last].balance
+        if user in unshares:
+            unshares[user] += freeSpace
+        else:
+            unshares[user] = freeSpace
         Wbatches.Q[Wbatches.last].requests.append([user, freeSpace])
         Wbatches.Q[Wbatches.last].balance += freeSpace
-        batchComplete()
         Wbatches.enqueue(batch())
-        Wbatches.Q[Wbatches.last].requests.append([user, amount - freeSpace])
-        Wbatches.Q[Wbatches.last].balance += amount - freeSpace
+        batchComplete()
+        withdraw(user, amount - freeSpace)
+        # Wbatches.Q[Wbatches.last].requests.append([user, amount - freeSpace])
+        # Wbatches.Q[Wbatches.last].balance += amount - freeSpace
+
     expiryCheck()
     return
 
@@ -306,4 +320,18 @@ show_state()
 
 for i in range(20):
     withdraw('user'+str(int(i/2)), 1000)
+show_state()
+
+#%% Test 4
+initialisation()
+deposit('user1', 90000)
+time_pass(10, True)
+expiryCheck()
+show_state()
+deposit('user2',20000)
+show_state()
+withdraw('user1',20000)
+withdraw('user1',30000)
+deposit('user2',20000)
+expiryCheck()
 show_state()

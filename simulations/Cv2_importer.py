@@ -93,6 +93,8 @@ class ApproachC:
 
 
     def stake(self, Dbatch):
+        print('begin', self.VaultBalances["VaultAmount"])
+        self.show_state()
         self.SharePx = self.sharePx()
         print('Staking',Dbatch.balance,'...')
         for (user, amount) in Dbatch.requests:
@@ -113,6 +115,7 @@ class ApproachC:
         self.VaultBalances["ValidatorAmount"] += (Dbatch.balance + self.VaultBalances['claimedRewards'])
         self.VaultBalances["VaultAmount"] -= Dbatch.balance 
         self.VaultBalances['claimedRewards'] = 0
+        print('end', self.VaultBalances["VaultAmount"])
         return
 
 
@@ -149,6 +152,7 @@ class ApproachC:
 
 
     def pairBatches(self, Dbatch, Wbatch):
+        print("Pairing batches")
         self.SharePx = self.sharePx()
         for (user, amount) in Wbatch.requests:
             numOfShares = amount / self.SharePx
@@ -179,23 +183,29 @@ class ApproachC:
         self.claimRewards()
         # Add deposit fee 0.1% of amount
         self.VaultBalances["VaultAmount"] += amount * (1 + self.depositFee)
-        # give preshares to user
-        if user in self.preshares:
-            self.preshares[user] += amount
-        else:
-            self.preshares[user] = amount
         # add user's deposit request
         if(amount + self.Dbatches.Q[self.Dbatches.last].balance <= self.batchSize):
+            # give preshares to user
+            if user in self.preshares:
+                self.preshares[user] += amount
+            else:
+                self.preshares[user] = amount
             self.Dbatches.Q[self.Dbatches.last].requests.append([user, amount])
             self.Dbatches.Q[self.Dbatches.last].balance += amount
         else:
             freeSpace = self.batchSize - self.Dbatches.Q[self.Dbatches.last].balance
+            # give preshares to user
+            if user in self.preshares:
+                self.preshares[user] += freeSpace
+            else:
+                self.preshares[user] = freeSpace
             self.Dbatches.Q[self.Dbatches.last].requests.append([user, freeSpace])
             self.Dbatches.Q[self.Dbatches.last].balance += freeSpace
-            self.batchComplete()
             self.Dbatches.enqueue(batch())
-            self.Dbatches.Q[self.Dbatches.last].requests.append([user, amount - freeSpace])
-            self.Dbatches.Q[self.Dbatches.last].balance += amount - freeSpace
+            self.batchComplete()
+            self.deposit(user, amount - freeSpace)
+            # self.Dbatches.Q[self.Dbatches.last].requests.append([user, amount - freeSpace])
+            # self.Dbatches.Q[self.Dbatches.last].balance += amount - freeSpace
         self.expiryCheck()
         return
 
@@ -215,22 +225,29 @@ class ApproachC:
                 return
             
 
-        if user in self.unshares:
-            self.unshares[user] += amount
-        else:
-            self.unshares[user] = amount
 
         if(amount + self.Wbatches.Q[self.Wbatches.last].balance <= self.batchSize):
+            self.VaultBalances["VaultAmount"] -= amount * (1 - self.depositFee)
+            if user in self.unshares:
+                self.unshares[user] += amount
+            else:
+                self.unshares[user] = amount
             self.Wbatches.Q[self.Wbatches.last].requests.append([user, amount])
             self.Wbatches.Q[self.Wbatches.last].balance += amount
         else:
             freeSpace = self.batchSize - self.Wbatches.Q[self.Wbatches.last].balance
+            self.VaultBalances["VaultAmount"] -= freeSpace * (1 - self.depositFee)
+            if user in self.unshares:
+                self.unshares[user] += freeSpace
+            else:
+                self.unshares[user] = freeSpace
             self.Wbatches.Q[self.Wbatches.last].requests.append([user, freeSpace])
             self.Wbatches.Q[self.Wbatches.last].balance += freeSpace
-            self.batchComplete()
             self.Wbatches.enqueue(batch())
-            self.Wbatches.Q[self.Wbatches.last].requests.append([user, amount - freeSpace])
-            self.Wbatches.Q[self.Wbatches.last].balance += amount - freeSpace
+            self.batchComplete()
+            self.withdraw(user, amount - freeSpace)
+            # self.Wbatches.Q[self.Wbatches.last].requests.append([user, amount - freeSpace])
+            # self.Wbatches.Q[self.Wbatches.last].balance += amount - freeSpace
         self.expiryCheck()
         return
 
