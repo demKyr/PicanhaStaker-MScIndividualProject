@@ -1,0 +1,51 @@
+:root {
+  /* --primaryColor: #00abe1;
+  --secondaryColor: #ebf9fd;
+  --backgroundColor: #150734;
+  --textColor: #ffffff;
+  --formColor: #0c0026;
+  --inputBoxColor: #150734;
+  --goodDataColor: #002c03;
+  --badDataColor: #2c0000;
+  --boxShadowColor: rgba(0, 0, 0, 0.2); */
+
+  --primaryColor: #150734;
+  --secondaryColor: #00abe1;
+  --backgroundColor: #ebf9fd;
+  --textColor: #000000;
+  --formColor: #ffffff;
+  --inputBoxColor: #ffffff;
+  --goodDataColor: #ccf5c0;
+  --badDataColor: #f3caab; 
+  --boxShadowColor: #00000033;
+}
+
+html,
+body {
+  background-color: var(--backgroundColor);
+  padding: 0;
+  margin: 0;
+  color: var(--textColor);
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.instruction {
+  text-align: center;
+  margin: 5rem auto 2rem;
+}
+
+.noOutputMsg {
+  text-align: center;
+  font-style: italic;
+  color: rgb(108, 108, 108);
+}

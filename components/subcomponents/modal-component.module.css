@@ -1,0 +1,13 @@
+.row {
+  display: flex;
+}
+
+.modelName img:hover {
+  cursor: pointer;
+}
+
+.modelName img {
+  margin-top: 1rem;
+  width: 1rem;
+  height: 1rem;
+}
