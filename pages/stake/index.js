@@ -10,26 +10,27 @@ function StakePage() {
   const { activate, active, library: provider } = useWeb3React();
   const contractsCtx = useContext(ContractsContext);
 
-  async function StakeModelHandler(
-    amount
-  ) {
+  async function handleIndirectStake(amount) {
     if (active) {
       try {
-        console.log(amount)
-        // let initialAccInt = parseInt(initialAcc * 100000);
-        // let NumOfCaptions = 100;
-        // const labelsArray = labels.split(",");
-        // await contractsCtx.contracts["staker"].addModel(
-        //   name,
-        //   description,
-        //   NumOfVotes,
-        //   NumOfCaptions,
-        //   initialAccInt,
-        //   labelsArray,
-        //   {
-        //     value: ethers.utils.parseEther(ModelCost),
-        //   }
-        // );
+        console.log("Indirect Stake:", parseFloat(amount));
+        // Your logic for handling indirect stake
+        // For example, you can call a contract function for indirect stake
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      document.getElementById("executeButton").innerHTML =
+        "Please install Metamask";
+    }
+  }
+
+  async function handleDirectStake(amount) {
+    if (active) {
+      try {
+        console.log("Direct Stake:", parseFloat(amount));
+        // Your logic for handling direct stake
+        // For example, you can call a contract function for direct stake
       } catch (error) {
         console.log(error);
       }
@@ -42,9 +43,24 @@ function StakePage() {
   return (
     <div>
       <h1 className="instruction">Stake</h1>
-      <StakeModel onStakeModel={StakeModelHandler} />
+      <StakeModel onIndirectStake={handleIndirectStake} onDirectStake={handleDirectStake} />
     </div>
   );
 }
 
 export default StakePage;
+
+// let initialAccInt = parseInt(initialAcc * 100000);
+// let NumOfCaptions = 100;
+// const labelsArray = labels.split(",");
+// await contractsCtx.contracts["staker"].addModel(
+//   name,
+//   description,
+//   NumOfVotes,
+//   NumOfCaptions,
+//   initialAccInt,
+//   labelsArray,
+//   {
+//     value: ethers.utils.parseEther(ModelCost),
+//   }
+// );

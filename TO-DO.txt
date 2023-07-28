@@ -1,0 +1,4 @@
+Create Unstake page
+Create HomePage
+Create logo
+Create info component with balance, max withdrawal, preshares etc and add it to both pages

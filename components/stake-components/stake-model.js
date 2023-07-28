@@ -1,46 +1,41 @@
-import { useRef } from "react";
-
+import { useState, useRef } from "react";
 import Button from "../ui/button";
 import classes from "./stake-model.module.css";
 
 function StakeModel(props) {
   const AmountInputRef = useRef();
+  const [givenAmount, setGivenAmount] = useState("");
 
   function submitHandler(event) {
     event.preventDefault();
-
-    const givenAmount = AmountInputRef.current.value;
-
-    if (!isNaN(+givenAmount)) {
-      props.onStakeModel(
-        givenAmount,
-      );
+    const amount = AmountInputRef.current.value;
+    if (!isNaN(+amount)) {
+      setGivenAmount(amount);
+      if (props.onIndirectStake) { 
+        props.onIndirectStake(amount);
+      } else if (props.onDirectStake) { 
+        props.onDirectStake(amount);
+      }
     }
   }
 
   return (
     <form className={classes.form} onSubmit={submitHandler}>
       <div className={classes.controls}>
-
-
         <div className={classes.mainControl}>
-          <label htmlFor="NumOfVotes">Amount</label>
+          <label htmlFor="Amount">Amount</label>
           <input
             type="text"
             required
-            id="NumOfVotes"
+            id="Amount"
             ref={AmountInputRef}
           />
         </div>
 
         <div className={classes.secondaryControl}>
-          <Button>Indirect Stake</Button>
+          <Button onClick={props.onIndirectStake}>Indirect Stake</Button>
+          <Button onClick={props.onDirectStake}>Direct Stake</Button>
         </div>
-
-        <div className={classes.secondaryControl}>
-          <Button>Direct Stake</Button>
-        </div>
-
       </div>
     </form>
   );
