@@ -9,11 +9,11 @@
   --badDataColor: #2c0000;
   --boxShadowColor: rgba(0, 0, 0, 0.2); */
 
-  --primaryColor: #150734;
-  --secondaryColor: #00abe1;
-  --backgroundColor: #ebf9fd;
-  --textColor: #000000;
-  --formColor: #ffffff;
+  --primaryColor: rgb(41, 43, 67);
+  --secondaryColor: rgb(0, 225, 139);
+  --backgroundColor: rgb(128, 129, 141);
+  --textColor: rgb(255, 255, 255);
+  --formColor: rgb(10, 10, 39);
   --inputBoxColor: #ffffff;
   --goodDataColor: #ccf5c0;
   --badDataColor: #f3caab; 
