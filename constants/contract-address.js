@@ -1,5 +1,5 @@
 module.exports = {
   contractAddresses: {
-    staker: "0xd81064777c998b25579393a5De86B7cBd6ada4CB",
+    staker: "0x185B21f4Ee2e76528dcDF6320DA8be7f6a3e0bBA",
   },
 };
