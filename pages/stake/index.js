@@ -4,7 +4,7 @@ import { useState, useContext, useRef } from "react";
 
 import ContractsContext from "../../store/contract-context";
 import StakeModel from "../../components/stake-components/stake-model";
-import { ModelCost } from "../../constants/parameters";
+import UserInfoModel from "../../components/user-info-components/user-info-model";
 
 function StakePage() {
   const { activate, active, library: provider } = useWeb3React();
@@ -43,6 +43,7 @@ function StakePage() {
   return (
     <div>
       <h1 className="instruction">Stake</h1>
+      <UserInfoModel />
       <StakeModel onIndirectStake={handleIndirectStake} onDirectStake={handleDirectStake} />
     </div>
   );
