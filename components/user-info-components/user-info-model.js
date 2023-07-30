@@ -2,20 +2,13 @@ import { useWeb3React } from "@web3-react/core";
 import { useState, useEffect, useContext } from "react";
 import { ethers } from "ethers";
 
-// import { ethers } from "ethers";
 import classes from "./user-info-model.module.css";
-import ContractsContext from "../../store/contract-context";
 import { stakerAbi } from "../../constants/staker-abi";
 import { contractAddresses } from "../../constants/contract-address";
 
 function UserInfoModel() {
-  const [preshares, setPreshares] = useState(0);
-  const [maxDeposit, setMaxDeposit] = useState(0);
 
-//   const { activate, active, library: provider } = useWeb3React();
-//   const signer = provider.getSigner();
   const { activate, active, library: provider } = useWeb3React();
-  const contractsCtx = useContext(ContractsContext);
   const [isLoading, setIsLoading] = useState(true);
   const [loadedModelInfo, setLoadedModelInfo] = useState([]);
   const signer = provider.getSigner();
