@@ -33,8 +33,18 @@ function StakeModel(props) {
         </div>
 
         <div className={classes.secondaryControl}>
-          <Button onClick={props.onIndirectStake}>Indirect Stake</Button>
-          <Button onClick={props.onDirectStake}>Direct Stake</Button>
+          <Button onClick={props.onIndirectStake}>
+            Indirect Stake
+            <div style={{ fontSize: '14px', fontStyle: 'italic' }}>
+              <br/> + 0.1% fee <br/> processed within 7 days
+            </div>
+          </Button>
+          <Button onClick={props.onDirectStake}>
+            Direct Stake
+            <div style={{ fontSize: '14px', fontStyle: 'italic' }}>
+              <br/> + staking fee <br/> processed immediately
+            </div>
+            </Button>
         </div>
       </div>
     </form>
