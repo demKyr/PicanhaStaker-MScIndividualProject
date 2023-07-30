@@ -1,21 +1,25 @@
-import { useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "../ui/button";
 import classes from "./stake-model.module.css";
 
 function StakeModel(props) {
   const AmountInputRef = useRef();
-  const [givenAmount, setGivenAmount] = useState("");
 
   function submitHandler(event) {
     event.preventDefault();
+  }
+
+  function handleIndirectStake() {
     const amount = AmountInputRef.current.value;
     if (!isNaN(+amount)) {
-      setGivenAmount(amount);
-      if (props.onIndirectStake) { 
-        props.onIndirectStake(amount);
-      } else if (props.onDirectStake) { 
-        props.onDirectStake(amount);
-      }
+      props.onIndirectStake(amount);
+    }
+  }
+
+  function handleDirectStake() {
+    const amount = AmountInputRef.current.value;
+    if (!isNaN(+amount)) {
+      props.onDirectStake(amount);
     }
   }
 
@@ -33,18 +37,18 @@ function StakeModel(props) {
         </div>
 
         <div className={classes.secondaryControl}>
-          <Button onClick={props.onIndirectStake}>
+          <Button onClick={handleIndirectStake}>
             Indirect Stake
             <div style={{ fontSize: '14px', fontStyle: 'italic' }}>
               <br/> + 0.1% fee <br/> processed within 7 days
             </div>
           </Button>
-          <Button onClick={props.onDirectStake}>
+          <Button onClick={handleDirectStake}>
             Direct Stake
             <div style={{ fontSize: '14px', fontStyle: 'italic' }}>
               <br/> + staking fee <br/> processed immediately
             </div>
-            </Button>
+          </Button>
         </div>
       </div>
     </form>
