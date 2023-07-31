@@ -44,6 +44,13 @@ a {
   margin: 5rem auto 2rem;
 }
 
+.note {
+  text-align: center;
+  margin: 5rem auto 2rem;
+  font-style: italic;
+  font-size: 18px;
+}
+
 .noOutputMsg {
   text-align: center;
   font-style: italic;
