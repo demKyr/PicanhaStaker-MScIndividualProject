@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 
 import classes from "./unstake-user-info-model.module.css";
 import { stakerAbi } from "../../constants/staker-abi";
+import { maticGoerliAbi } from "../../constants/matic-goerli-abi";
 import { contractAddresses } from "../../constants/contract-address";
 
 function UserInfoModel() {
@@ -21,6 +22,7 @@ useEffect(() => {
           const signerAddr = await signer.getAddress();
           const modelInfo = {};
           const contract = new ethers.Contract(contractAddresses["staker"], stakerAbi, signer);
+          const stakingTokenContract = new ethers.Contract(contractAddresses["maticGoerli"], maticGoerliAbi, signer);
 
           const loadedBalance = await contract.balanceOf(signerAddr);
           const loadedBalanceMATIC = await contract.toAssets(loadedBalance);
@@ -29,6 +31,9 @@ useEffect(() => {
 
           const loadedPreshares = await contract.getUserPreshares(signerAddr);
           modelInfo["preshares"] = loadedPreshares.toString();
+
+          const loadedWalletBalance = await stakingTokenContract.balanceOf(signerAddr);
+          modelInfo["walletBalance"] = parseFloat(ethers.utils.formatEther(loadedWalletBalance)).toString();
 
           const loadedMaxWithdraw = await contract.maxWithdraw(signerAddr);
           modelInfo["maxWithdraw"] = loadedMaxWithdraw.toString();
@@ -58,6 +63,12 @@ useEffect(() => {
           <span className={classes.title}>Preshares:</span>
           <span className={classes.value}>{loadedModelInfo["preshares"]} MATIC</span>
         </div>
+        <hr className={classes.horizontalLine}/>
+        <div className={classes.listItem}>
+          <span className={classes.title}>Available in wallet:</span>
+          <span className={classes.value}>{loadedModelInfo["walletBalance"]} MATIC</span>
+        </div>
+        <hr className={classes.horizontalLine}/>
         <div className={classes.listItem}>
           <span className={classes.title}>Max Withdraw:</span>
           <span className={classes.value}>{loadedModelInfo["maxWithdraw"]} MATIC</span>

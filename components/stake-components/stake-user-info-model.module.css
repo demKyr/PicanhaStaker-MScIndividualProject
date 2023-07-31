@@ -28,3 +28,7 @@
     text-align: right;
   }
   
+  .horizontalLine {
+    border: 0.5px solid var(--secondaryColor);
+    margin: 1rem 0;
+  }
