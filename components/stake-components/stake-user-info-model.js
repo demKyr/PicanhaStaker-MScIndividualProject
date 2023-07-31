@@ -32,9 +32,6 @@ useEffect(() => {
 
           const loadedMaxDeposit = await contract.maxDeposit(signerAddr);
           modelInfo["maxDeposit"] = parseFloat(ethers.utils.formatEther(loadedMaxDeposit)).toString();
-
-          const loadedMaxWithdraw = await contract.maxWithdraw(signerAddr);
-          modelInfo["maxWithdraw"] = loadedMaxWithdraw.toString();
           
           setIsLoading(false);
           setLoadedModelInfo(modelInfo);
@@ -64,10 +61,6 @@ useEffect(() => {
         <div className={classes.listItem}>
           <span className={classes.title}>Max Deposit:</span>
           <span className={classes.value}>{loadedModelInfo["maxDeposit"]} MATIC</span>
-        </div>
-        <div className={classes.listItem}>
-          <span className={classes.title}>Max Withdraw:</span>
-          <span className={classes.value}>{loadedModelInfo["maxWithdraw"]} MATIC</span>
         </div>
       </form>
     </div>
