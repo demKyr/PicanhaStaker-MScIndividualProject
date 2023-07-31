@@ -1,6 +1,6 @@
 .form {
     font-size: 18px;
-    margin: 5rem auto;
+    margin: 1rem auto;
     box-shadow: 0 1px 4px var(--boxShadowColor);
     padding: 1rem;
     background-color: var(--formColor);
