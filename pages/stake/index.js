@@ -1,23 +1,29 @@
 import { useWeb3React } from "@web3-react/core";
 import { ethers } from "ethers";
-import { useState, useContext, useRef } from "react";
 
-import ContractsContext from "../../store/contract-context";
 import StakeModel from "../../components/stake-components/stake-model";
 import UserInfoModel from "../../components/user-info-components/user-info-model";
+import { stakerAbi } from "../../constants/staker-abi";
+import { contractAddresses } from "../../constants/contract-address";
 
 function StakePage() {
   const { activate, active, library: provider } = useWeb3React();
-  const contractsCtx = useContext(ContractsContext);
+  const signer = provider.getSigner();
 
   async function handleIndirectStake(amount) {
     if (active) {
+      const signerAddr = await signer.getAddress();
+      const contract = new ethers.Contract(contractAddresses["staker"], stakerAbi, signer);
       try {
-        console.log("Indirect Stake:", parseFloat(amount));
-        // Your logic for handling indirect stake
-        // For example, you can call a contract function for indirect stake
+        const tx = await contract.indirectDeposit(
+          ethers.utils.parseEther(amount), 
+          signerAddr, 
+          { 
+            from: signerAddr,
+            gasLimit: 200000
+          });
       } catch (error) {
-        console.log(error);
+        console.error("Error in indirect deposit:", error);
       }
     } else {
       document.getElementById("executeButton").innerHTML =
@@ -27,12 +33,18 @@ function StakePage() {
 
   async function handleDirectStake(amount) {
     if (active) {
+      const signerAddr = await signer.getAddress();
+      const contract = new ethers.Contract(contractAddresses["staker"], stakerAbi, signer);
       try {
-        console.log("Direct Stake:", parseFloat(amount));
-        // Your logic for handling direct stake
-        // For example, you can call a contract function for direct stake
+        const tx = await contract.directDeposit(
+          ethers.utils.parseEther(amount), 
+          signerAddr, 
+          { 
+            from: signerAddr,
+            gasLimit: 200000
+          });
       } catch (error) {
-        console.log(error);
+        console.error("Error in direct deposit:", error);
       }
     } else {
       document.getElementById("executeButton").innerHTML =
@@ -50,18 +62,3 @@ function StakePage() {
 }
 
 export default StakePage;
-
-// let initialAccInt = parseInt(initialAcc * 100000);
-// let NumOfCaptions = 100;
-// const labelsArray = labels.split(",");
-// await contractsCtx.contracts["staker"].addModel(
-//   name,
-//   description,
-//   NumOfVotes,
-//   NumOfCaptions,
-//   initialAccInt,
-//   labelsArray,
-//   {
-//     value: ethers.utils.parseEther(ModelCost),
-//   }
-// );
