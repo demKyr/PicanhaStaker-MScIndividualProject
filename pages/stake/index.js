@@ -2,7 +2,7 @@ import { useWeb3React } from "@web3-react/core";
 import { ethers } from "ethers";
 
 import StakeModel from "../../components/stake-components/stake-model";
-import UserInfoModel from "../../components/user-info-components/user-info-model";
+import UserInfoModel from "../../components/stake-components/stake-user-info-model";
 import { stakerAbi } from "../../constants/staker-abi";
 import { contractAddresses } from "../../constants/contract-address";
 
