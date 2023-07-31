@@ -30,12 +30,14 @@ function HomePage() {
 
   return (
     <div>
-      <h1 className={classes.title}>Welcome to DEMOS</h1>
+      <h1 className={classes.title}>Welcome to TruStake Picanha vault</h1>
       <div className={classes.logo}>
         <Image src="/logo.png" alt="home" width="350" height="350" />
       </div>
       <p className={classes.bodyText}>
-        DEMOS (Distributedly Enhanced Machine learning Optimization System) is a
+        TruStake Picanha vault is a staking vault for MATIC tokens designed to minimise the 
+        transaction fees for staking and unstaking. Thereby, Picanha aims to make native staking
+        available to everyone.
 
       </p>
 
