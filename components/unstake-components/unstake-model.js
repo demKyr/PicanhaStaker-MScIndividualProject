@@ -41,12 +41,14 @@ function UnstakeModel(props) {
             Indirect Unstake
             <div style={{ fontSize: '14px', fontStyle: 'italic' }}>
               <br/> + 0.1% fee <br/> processed within 7 days
+              <br/> <br/> Minimum amount: 100 MATIC
             </div>
           </Button>
           <Button onClick={handleDirectUnstake}>
             Direct Unstake
             <div style={{ fontSize: '14px', fontStyle: 'italic' }}>
               <br/> + staking fee <br/> processed immediately
+              <br/> <br/>No minimum amount
             </div>
           </Button>
         </div>

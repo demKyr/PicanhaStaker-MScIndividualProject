@@ -35,12 +35,13 @@ function HomePage() {
         <Image src="/logo.png" alt="home" width="350" height="350" />
       </div>
       <p className={classes.bodyText}>
-        TruStake Picanha vault is a staking vault for MATIC tokens designed to minimise the 
-        transaction fees for staking and unstaking. Thereby, Picanha aims to make native staking
-        available to everyone.
-
+        TruStake Picanha vault is a staking vault for MATIC tokens,<br/>  meticulously designed to optimize transaction fees 
+        for both staking and unstaking processes.<br/> Our objective is to make native staking accessible to all, <br/> 
+        offering a passive and secure source of income, guided by: 
+        <br/>Trustless operation
+        <br/>Non-custodial management
+        <br/>Risk-free participation
       </p>
-
     </div>
   );
 }

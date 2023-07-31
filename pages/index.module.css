@@ -1,12 +1,12 @@
 .title{
-    margin: 2rem 0 0rem;
+    margin: 4rem 0 4rem;
     text-align: center;
 }
 
 .bodyText{
     width: 70%;
     text-align: center;
-    margin: auto;
+    margin: 4rem auto;
     font-size:large;
 }
 
@@ -14,11 +14,10 @@
     color: var(--secondaryColor);;
 }
 
-.bodyText li{
-    text-align: left;
-    margin-left: 25%;
+.bodyText h1{
+    margin-bottom: 3%;
 }
-
+  
 .logo{
     text-align: center;
 }

@@ -41,12 +41,14 @@ function StakeModel(props) {
             Indirect Stake
             <div style={{ fontSize: '14px', fontStyle: 'italic' }}>
               <br/> + 0.1% fee <br/> processed within 7 days
+              <br/> <br/>Minimum amount: 100 MATIC
             </div>
           </Button>
           <Button onClick={handleDirectStake}>
             Direct Stake
             <div style={{ fontSize: '14px', fontStyle: 'italic' }}>
               <br/> + staking fee <br/> processed immediately
+              <br/> <br/>No minimum amount
             </div>
           </Button>
         </div>
