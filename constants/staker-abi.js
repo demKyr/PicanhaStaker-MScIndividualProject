@@ -57,11 +57,6 @@ module.exports = {
     },
     {
       "inputs": [],
-      "name": "ExcessDeallocation",
-      "type": "error"
-    },
-    {
-      "inputs": [],
       "name": "InsufficientDistributorBalance",
       "type": "error"
     },
@@ -126,67 +121,6 @@ module.exports = {
         {
           "indexed": true,
           "internalType": "address",
-          "name": "_distributor",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_recipient",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_individualAmount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_individualNum",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_individualDenom",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_totalAmount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_totalNum",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_totalDenom",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "internalType": "bool",
-          "name": "_strict",
-          "type": "bool"
-        }
-      ],
-      "name": "Allocated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
           "name": "owner",
           "type": "address"
         },
@@ -204,55 +138,6 @@ module.exports = {
         }
       ],
       "name": "Approval",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_distributor",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_recipient",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_individualAmount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_totalAmount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_totalNum",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_totalDenom",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "internalType": "bool",
-          "name": "_strict",
-          "type": "bool"
-        }
-      ],
-      "name": "Deallocated",
       "type": "event"
     },
     {
@@ -290,141 +175,6 @@ module.exports = {
       "anonymous": false,
       "inputs": [
         {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_user",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_treasuryShares",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_userShares",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_amount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_stakedAmount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_totalAssets",
-          "type": "uint256"
-        }
-      ],
-      "name": "Deposited",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_distributor",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_curNum",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_curDenom",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "internalType": "bool",
-          "name": "_strict",
-          "type": "bool"
-        }
-      ],
-      "name": "DistributedAll",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_distributor",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_recipient",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_amount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_shares",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_individualNum",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_individualDenom",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_totalNum",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_totalDenom",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "internalType": "bool",
-          "name": "_strict",
-          "type": "bool"
-        }
-      ],
-      "name": "DistributedRewards",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
           "indexed": false,
           "internalType": "uint8",
           "name": "version",
@@ -451,220 +201,6 @@ module.exports = {
         }
       ],
       "name": "OwnershipTransferred",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_distributor",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_oldRecipient",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_newRecipient",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_newAmount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_newNum",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_newDenom",
-          "type": "uint256"
-        }
-      ],
-      "name": "Reallocated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "_amount",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "_shares",
-          "type": "uint256"
-        }
-      ],
-      "name": "RewardsCompounded",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "bool",
-          "name": "_oldAllowStrict",
-          "type": "bool"
-        },
-        {
-          "indexed": true,
-          "internalType": "bool",
-          "name": "_newAllowStrict",
-          "type": "bool"
-        }
-      ],
-      "name": "SetAllowStrict",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "_oldCap",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "_newCap",
-          "type": "uint256"
-        }
-      ],
-      "name": "SetCap",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "_oldDistPhi",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "_newDistPhi",
-          "type": "uint256"
-        }
-      ],
-      "name": "SetDistPhi",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "_oldEpsilon",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "_newEpsilon",
-          "type": "uint256"
-        }
-      ],
-      "name": "SetEpsilon",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "_oldPhi",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "_newPhi",
-          "type": "uint256"
-        }
-      ],
-      "name": "SetPhi",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_oldTreasuryAddress",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_newTreasuryAddress",
-          "type": "address"
-        }
-      ],
-      "name": "SetTreasury",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_oldValidatorShareContract",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_newValidatorShareContract",
-          "type": "address"
-        }
-      ],
-      "name": "SetValidatorShareContract",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_oldWhitelistAddress",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_newWhitelistAddress",
-          "type": "address"
-        }
-      ],
-      "name": "SetWhitelist",
       "type": "event"
     },
     {
@@ -697,12 +233,6 @@ module.exports = {
         {
           "indexed": false,
           "internalType": "address",
-          "name": "_whitelistAddress",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "address",
           "name": "_treasuryAddress",
           "type": "address"
         },
@@ -721,7 +251,43 @@ module.exports = {
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "_distPhi",
+          "name": "_depositFee",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_withdrawalFee",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_minDepositAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_minWithdrawalAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_expiryPeriod",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_dQueueThreshold",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_wQueueThreshold",
           "type": "uint256"
         }
       ],
@@ -810,80 +376,6 @@ module.exports = {
       "type": "event"
     },
     {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_user",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "_unbondNonce",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "WithdrawalClaimed",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "_user",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_treasuryShares",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_userShares",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_amount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_totalAssets",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "_unbondNonce",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "_epoch",
-          "type": "uint256"
-        }
-      ],
-      "name": "WithdrawalRequested",
-      "type": "event"
-    },
-    {
       "inputs": [
         {
           "internalType": "address",
@@ -964,6 +456,19 @@ module.exports = {
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "cap",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -1004,6 +509,19 @@ module.exports = {
     {
       "inputs": [],
       "name": "dQueueBalance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "dQueueThreshold",
       "outputs": [
         {
           "internalType": "uint256",
@@ -1076,6 +594,19 @@ module.exports = {
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "depositFee",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -1126,6 +657,19 @@ module.exports = {
         }
       ],
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "expiryPeriod",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -1283,11 +827,6 @@ module.exports = {
         },
         {
           "internalType": "address",
-          "name": "_whitelistAddress",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
           "name": "_treasuryAddress",
           "type": "address"
         },
@@ -1298,12 +837,42 @@ module.exports = {
         },
         {
           "internalType": "uint256",
-          "name": "_distPhi",
+          "name": "_cap",
           "type": "uint256"
         },
         {
           "internalType": "uint256",
-          "name": "_cap",
+          "name": "_depositFee",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_withdrawalFee",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_minDepositAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_minWithdrawalAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_expiryPeriod",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_dQueueThreshold",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_wQueueThreshold",
           "type": "uint256"
         }
       ],
@@ -1410,6 +979,32 @@ module.exports = {
         }
       ],
       "name": "maxWithdraw",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "minDepositAmount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "minWithdrawalAmount",
       "outputs": [
         {
           "internalType": "uint256",
@@ -1591,6 +1186,11 @@ module.exports = {
     },
     {
       "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_cap",
+          "type": "uint256"
+        },
         {
           "internalType": "uint256",
           "name": "_depositFee",
@@ -1814,6 +1414,19 @@ module.exports = {
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "wQueueThreshold",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -1840,6 +1453,19 @@ module.exports = {
         }
       ],
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "withdrawalFee",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     }
   ]
