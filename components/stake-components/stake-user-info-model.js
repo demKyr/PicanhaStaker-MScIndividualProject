@@ -51,7 +51,6 @@ useEffect(() => {
     fetchData();
   }, []);
 
-
   return (
     <div className={classes.userInfo}>
       <form className={`${classes.form} ${classes.list}`}>
