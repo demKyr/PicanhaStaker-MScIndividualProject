@@ -28,17 +28,17 @@ useEffect(() => {
           const loadedBalanceMATIC = await contract.toAssets(loadedBalance);
           const loadedBalanceMATICFloat = parseFloat(ethers.utils.formatEther(loadedBalanceMATIC));
           const loadedRewards = parseFloat(ethers.utils.formatEther(loadedBalanceMATIC - loadedBalance));
-          modelInfo["balance"] = loadedBalanceMATICFloat.toString();
-          modelInfo["rewards"] = loadedRewards.toString();
+          modelInfo["balance"] = loadedBalanceMATICFloat.toFixed(5).toString();
+          modelInfo["rewards"] = loadedRewards.toFixed(5).toString();
 
           const loadedPreshares = await contract.getUserPreshares(signerAddr);
-          modelInfo["preshares"] = loadedPreshares.toString();
+          modelInfo["preshares"] = parseFloat(ethers.utils.formatEther(loadedPreshares)).toFixed(5).toString();
 
           const loadedWalletBalance = await stakingTokenContract.balanceOf(signerAddr);
-          modelInfo["walletBalance"] = parseFloat(ethers.utils.formatEther(loadedWalletBalance)).toString();
+          modelInfo["walletBalance"] = parseFloat(ethers.utils.formatEther(loadedWalletBalance)).toFixed(5).toString();
 
           const loadedMaxWithdraw = await contract.maxWithdraw(signerAddr);
-          modelInfo["maxWithdraw"] = loadedMaxWithdraw.toString();
+          modelInfo["maxWithdraw"] = parseFloat(ethers.utils.formatEther(loadedMaxWithdraw)).toFixed(5).toString();
           
           setIsLoading(false);
           setLoadedModelInfo(modelInfo);

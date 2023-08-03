@@ -32,6 +32,13 @@ function StakeModel(props) {
     }
   }
 
+  function handleApprove() {
+    const amount = AmountInputRef.current.value;
+    if (!isNaN(+amount)) {
+      props.onApprove(amount);
+    }
+  }
+
   useEffect(() => {
     async function fetchData() {
       if (active) {
@@ -73,6 +80,7 @@ function StakeModel(props) {
             id="Amount"
             ref={AmountInputRef}
           />
+          <Button onClick={handleApprove}>Approve</Button>
         </div>
 
         <div className={classes.secondaryControl}>

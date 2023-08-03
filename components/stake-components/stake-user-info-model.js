@@ -28,17 +28,20 @@ useEffect(() => {
           const loadedBalanceMATIC = await contract.toAssets(loadedBalance);
           const loadedBalanceMATICFloat = parseFloat(ethers.utils.formatEther(loadedBalanceMATIC));
           const loadedRewards = parseFloat(ethers.utils.formatEther(loadedBalanceMATIC - loadedBalance));
-          modelInfo["balance"] = loadedBalanceMATICFloat.toString();
-          modelInfo["rewards"] = loadedRewards.toString();
+          modelInfo["balance"] = loadedBalanceMATICFloat.toFixed(5).toString();
+          modelInfo["rewards"] = loadedRewards.toFixed(5).toString();
 
           const loadedPreshares = await contract.getUserPreshares(signerAddr);
-          modelInfo["preshares"] = loadedPreshares.toString();
+          modelInfo["preshares"] = parseFloat(ethers.utils.formatEther(loadedPreshares)).toFixed(5).toString();
 
           const loadedWalletBalance = await stakingTokenContract.balanceOf(signerAddr);
-          modelInfo["walletBalance"] = parseFloat(ethers.utils.formatEther(loadedWalletBalance)).toString();
+          modelInfo["walletBalance"] = parseFloat(ethers.utils.formatEther(loadedWalletBalance)).toFixed(5).toString();
 
           const loadedMaxDeposit = await contract.maxDeposit(signerAddr);
-          modelInfo["maxDeposit"] = parseFloat(ethers.utils.formatEther(loadedMaxDeposit)).toString();
+          modelInfo["maxDeposit"] = parseFloat(ethers.utils.formatEther(loadedMaxDeposit)).toFixed(5).toString();
+
+          const loadedApprovedBalance = await stakingTokenContract.allowance(signerAddr, contractAddresses["staker"]);
+          modelInfo["approvedBalance"] = parseFloat(ethers.utils.formatEther(loadedApprovedBalance)).toFixed(5).toString();
 
           setIsLoading(false);
           setLoadedModelInfo(modelInfo);
@@ -78,6 +81,11 @@ useEffect(() => {
         <div className={classes.listItem}>
           <span className={classes.title}>Max Deposit:</span>
           <span className={classes.value}>{loadedModelInfo["maxDeposit"]} MATIC</span>
+        </div>
+        <hr className={classes.horizontalLine}/>
+        <div className={classes.listItem}>
+          <span className={classes.title}>Approved Balance:</span>
+          <span className={classes.value}>{loadedModelInfo["approvedBalance"]} MATIC</span>
         </div>
       </form>
     </div>
