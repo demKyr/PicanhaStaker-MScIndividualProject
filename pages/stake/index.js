@@ -76,7 +76,6 @@ function StakePage() {
 
   return (
     <div>
-      <h1 className="instruction">Stake</h1>
       <UserInfoModel />
       <StakeModel onIndirectStake={handleIndirectStake} onDirectStake={handleDirectStake} onApprove={handleApprove}/>
     </div>

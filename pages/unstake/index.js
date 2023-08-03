@@ -56,7 +56,6 @@ function UnstakePage() {
 
   return (
     <div>
-      <h1 className="instruction">Unstake</h1>
       <UserInfoModel />
       <p className="note">Note: Having preshares indicates that you currently have pending indirect stake requests.
       <br/>While you have the option to withdraw funds that have not been staked yet, we highly recommend against doing so. 
