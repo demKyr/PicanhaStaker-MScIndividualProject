@@ -16,11 +16,8 @@ function StakePage() {
       const signerAddr = await signer.getAddress();
       const contract = new ethers.Contract(contractAddresses["staker"], stakerAbi, signer);
       try {
-        const depositFee = await contract.depositFee();
-        const depositFeeAmount = parseInt(amount) * depositFee / 1e4;
-        const totalDepositAmount = (parseInt(amount) + depositFeeAmount).toString();
         const tx = await contract.indirectDeposit(
-          ethers.utils.parseEther(totalDepositAmount), 
+          ethers.utils.parseEther(amount), 
           signerAddr, 
           { 
             from: signerAddr,
