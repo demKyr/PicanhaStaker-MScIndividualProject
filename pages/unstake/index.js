@@ -21,7 +21,7 @@ function UnstakePage() {
           signerAddr, 
           { 
             from: signerAddr,
-            gasLimit: 200000
+            gasLimit: 2_000_000
           });
       } catch (error) {
         console.error("Error in indirect withdraw request:", error);
@@ -43,7 +43,7 @@ function UnstakePage() {
           signerAddr, 
           { 
             from: signerAddr,
-            gasLimit: 200000
+            gasLimit: 2_000_000
           });
       } catch (error) {
         console.error("Error in direct withdraw request:", error);
