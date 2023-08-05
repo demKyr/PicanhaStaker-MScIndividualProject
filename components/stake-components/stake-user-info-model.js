@@ -27,7 +27,7 @@ useEffect(() => {
           const loadedBalance = await contract.balanceOf(signerAddr);
           const loadedBalanceMATIC = await contract.toAssets(loadedBalance);
           const loadedBalanceMATICFloat = parseFloat(ethers.utils.formatEther(loadedBalanceMATIC));
-          const loadedRewards = parseFloat(ethers.utils.formatEther(loadedBalanceMATIC - loadedBalance));
+          const loadedRewards = parseFloat((loadedBalanceMATIC - loadedBalance)/1e18);
           modelInfo["balance"] = loadedBalanceMATICFloat.toFixed(5).toString();
           modelInfo["rewards"] = loadedRewards.toFixed(5).toString();
 
