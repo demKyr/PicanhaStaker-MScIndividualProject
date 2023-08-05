@@ -28,8 +28,8 @@ useEffect(() => {
           modelInfo["totalStaked"] = parseFloat(ethers.utils.formatEther(loadedTotalStaked)).toFixed(5).toString();
           const loadedVaultBalance = await contract.totalAssets();
           modelInfo["vaultBalance"] = parseFloat(ethers.utils.formatEther(loadedVaultBalance)).toFixed(5).toString();
-          const loadedTotalRewards = await contract.totalRewards();
-          modelInfo["totalRewards"] = parseFloat(ethers.utils.formatEther(loadedTotalRewards)).toFixed(5).toString();
+          const loadedUnclaimedRewards = await contract.totalRewards();
+          modelInfo["unclaimedRewards"] = parseFloat(ethers.utils.formatEther(loadedUnclaimedRewards)).toFixed(5).toString();
           const loadedTotalShares = await contract.totalSupply();
           modelInfo["totalShares"] = parseFloat(ethers.utils.formatEther(loadedTotalShares)).toFixed(5).toString();
           const loadedTotalPreshares = await contract.dQueueBalance();
@@ -88,8 +88,8 @@ useEffect(() => {
           <span className={classes.value}>{loadedModelInfo["vaultBalance"]} MATIC</span>
         </div>
         <div className={classes.listItem}>
-          <span className={classes.title}>Total Rewards:</span>
-          <span className={classes.value}>{loadedModelInfo["totalRewards"]} MATIC</span>
+          <span className={classes.title}>Unclaimed Rewards:</span>
+          <span className={classes.value}>{loadedModelInfo["unclaimedRewards"]} MATIC</span>
         </div>
         <hr className={classes.horizontalLine}/>
         <div className={classes.listItem}>

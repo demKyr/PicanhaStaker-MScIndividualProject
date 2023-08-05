@@ -29,7 +29,6 @@ function AdminPage() {
       </div>
     );
   } else {
-    // Render a message or redirect the user to another page if they don't have access
     return <div>You do not have access to this page.</div>;
   }
 }
