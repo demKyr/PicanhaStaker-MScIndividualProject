@@ -107,7 +107,7 @@ function AdminModel(props) {
             Unstake
             {isLoading ? <p style={{ fontSize: '14px', fontStyle: 'italic' }}>Calculating...</p> : (
             <div style={{ fontSize: '14px', fontStyle: 'italic' }}>
-              <br/> {loadedModelInfo["wQueueBalance"]} / {loadedModelInfo["wQueueThreshold"]} MATIC in dQueue
+              <br/> {loadedModelInfo["wQueueBalance"]} / {loadedModelInfo["wQueueThreshold"]} MATIC in wQueue
             </div>
             )}
           </Button>
