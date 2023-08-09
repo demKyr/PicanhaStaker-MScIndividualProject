@@ -6,6 +6,7 @@ import classes from "./stake-user-info-model.module.css";
 import { stakerAbi } from "../../constants/staker-abi";
 import { maticGoerliAbi } from "../../constants/matic-goerli-abi";
 import { contractAddresses } from "../../constants/contract-address";
+import { truncateDecimals } from "../../constants/functions";
 
 function UserInfoModel() {
 
@@ -28,20 +29,20 @@ useEffect(() => {
           const loadedBalanceMATIC = await contract.toAssets(loadedBalance);
           const loadedBalanceMATICFloat = parseFloat(ethers.utils.formatEther(loadedBalanceMATIC));
           const loadedRewards = parseFloat((loadedBalanceMATIC - loadedBalance)/1e18);
-          modelInfo["balance"] = loadedBalanceMATICFloat.toFixed(5).toString();
-          modelInfo["rewards"] = loadedRewards.toFixed(5).toString();
+          modelInfo["balance"] = truncateDecimals(loadedBalanceMATICFloat,5).toString();
+          modelInfo["rewards"] = truncateDecimals(loadedRewards,5).toString();
 
           const loadedPreshares = await contract.getUserPreshares(signerAddr);
-          modelInfo["preshares"] = parseFloat(ethers.utils.formatEther(loadedPreshares)).toFixed(5).toString();
+          modelInfo["preshares"] = truncateDecimals(parseFloat(ethers.utils.formatEther(loadedPreshares)),5).toString();
 
           const loadedWalletBalance = await stakingTokenContract.balanceOf(signerAddr);
-          modelInfo["walletBalance"] = parseFloat(ethers.utils.formatEther(loadedWalletBalance)).toFixed(5).toString();
+          modelInfo["walletBalance"] = truncateDecimals(parseFloat(ethers.utils.formatEther(loadedWalletBalance)),5).toString();
 
           const loadedMaxDeposit = await contract.maxDeposit(signerAddr);
-          modelInfo["maxDeposit"] = parseFloat(ethers.utils.formatEther(loadedMaxDeposit)).toFixed(5).toString();
+          modelInfo["maxDeposit"] = truncateDecimals(parseFloat(ethers.utils.formatEther(loadedMaxDeposit)),5).toString();
 
           const loadedApprovedBalance = await stakingTokenContract.allowance(signerAddr, contractAddresses["staker"]);
-          modelInfo["approvedBalance"] = parseFloat(ethers.utils.formatEther(loadedApprovedBalance)).toFixed(5).toString();
+          modelInfo["approvedBalance"] = truncateDecimals(parseFloat(ethers.utils.formatEther(loadedApprovedBalance)),5).toString();
 
           setIsLoading(false);
           setLoadedModelInfo(modelInfo);

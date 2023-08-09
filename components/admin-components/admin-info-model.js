@@ -6,6 +6,7 @@ import classes from "./admin-info-model.module.css";
 import { stakerAbi } from "../../constants/staker-abi";
 import { maticGoerliAbi } from "../../constants/matic-goerli-abi";
 import { contractAddresses } from "../../constants/contract-address";
+import { truncateDecimals } from "../../constants/functions";
 
 function AdminInfoModel() {
 
@@ -25,28 +26,28 @@ useEffect(() => {
           const stakingTokenContract = new ethers.Contract(contractAddresses["maticGoerli"], maticGoerliAbi, signer);
 
           const loadedTotalStaked = await contract.totalStaked();
-          modelInfo["totalStaked"] = parseFloat(ethers.utils.formatEther(loadedTotalStaked)).toFixed(5).toString();
+          modelInfo["totalStaked"] = truncateDecimals(parseFloat(ethers.utils.formatEther(loadedTotalStaked)),5).toString();
           const loadedVaultBalance = await contract.totalAssets();
-          modelInfo["vaultBalance"] = parseFloat(ethers.utils.formatEther(loadedVaultBalance)).toFixed(5).toString();
+          modelInfo["vaultBalance"] = truncateDecimals(parseFloat(ethers.utils.formatEther(loadedVaultBalance)),5).toString();
           const loadedUnclaimedRewards = await contract.totalRewards();
-          modelInfo["unclaimedRewards"] = parseFloat(ethers.utils.formatEther(loadedUnclaimedRewards)).toFixed(5).toString();
+          modelInfo["unclaimedRewards"] = truncateDecimals(parseFloat(ethers.utils.formatEther(loadedUnclaimedRewards)),5).toString();
           const loadedTotalShares = await contract.totalSupply();
-          modelInfo["totalShares"] = parseFloat(ethers.utils.formatEther(loadedTotalShares)).toFixed(5).toString();
+          modelInfo["totalShares"] = truncateDecimals(parseFloat(ethers.utils.formatEther(loadedTotalShares)),5).toString();
           const loadedTotalPreshares = await contract.dQueueBalance();
-          modelInfo["totalpreshares"] = parseFloat(ethers.utils.formatEther(loadedTotalPreshares)).toFixed(5).toString();
+          modelInfo["totalpreshares"] = truncateDecimals(parseFloat(ethers.utils.formatEther(loadedTotalPreshares)),5).toString();
           const [loadedSharePriceNum,loadedSharePriceDenom] = await contract.sharePrice();
-          modelInfo["sharePrice"] = parseFloat(loadedSharePriceNum/loadedSharePriceDenom/1e18).toFixed(5).toString();
+          modelInfo["sharePrice"] = truncateDecimals(parseFloat(loadedSharePriceNum/1e18/loadedSharePriceDenom),5).toString();
 
           const loadedBalance = await contract.balanceOf(signerAddr);
           const loadedBalanceMATIC = await contract.toAssets(loadedBalance);
           const loadedBalanceMATICFloat = parseFloat(ethers.utils.formatEther(loadedBalanceMATIC));
-          modelInfo["treasuryBalance"] = loadedBalanceMATICFloat.toFixed(5).toString();
+          modelInfo["treasuryBalance"] = truncateDecimals(loadedBalanceMATICFloat,5).toString();
 
           const loadedLatestUnbondingNonce = await contract.latestUnbondingNonce();
           modelInfo["latestUnbondingNonce"] = loadedLatestUnbondingNonce.toString();
 
           const loadedCap = await contract.cap();
-          modelInfo["cap"] = parseFloat(ethers.utils.formatEther(loadedCap)).toFixed(2).toString();
+          modelInfo["cap"] = truncateDecimals(parseFloat(ethers.utils.formatEther(loadedCap)),2).toString();
           const loadedDepositFee = await contract.depositFee();
           modelInfo["depositFee"] = (loadedDepositFee / 10000 * 100).toString();
           const loadedWithdrawalFee = await contract.withdrawalFee();
