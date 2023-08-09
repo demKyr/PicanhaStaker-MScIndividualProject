@@ -24,7 +24,7 @@ function AdminPage() {
     return (
       <div>
         <AdminInfoModel />
-        <p className="note">Reminder: Total Shares * Share Price + Total Preshares = Total Staked + Total Rewards + Vault Balance</p>
+        <p className="note">Reminder: Total Shares * Share Price + Total Preshares = Total Staked + Unclaimed Rewards + Vault Balance - wQueueBalance</p>
         <AdminModel />
       </div>
     );
