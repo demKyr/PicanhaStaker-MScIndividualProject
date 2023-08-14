@@ -7,21 +7,6 @@ module.exports = {
     },
     {
       "inputs": [],
-      "name": "AllocationNonExistent",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "AllocationUnderOneMATIC",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "CapTooLow",
-      "type": "error"
-    },
-    {
-      "inputs": [],
       "name": "DepositSurpassesVaultCap",
       "type": "error"
     },
@@ -38,16 +23,6 @@ module.exports = {
     {
       "inputs": [],
       "name": "DirectWithdrawalRequestAmountBelowMin",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "DistPhiTooLarge",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "EpsilonTooLarge",
       "type": "error"
     },
     {
@@ -88,16 +63,6 @@ module.exports = {
     {
       "inputs": [],
       "name": "SenderMustHaveInitiatedWithdrawalRequest",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "StrictAllocationDisabled",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "UserNotWhitelisted",
       "type": "error"
     },
     {
@@ -169,6 +134,82 @@ module.exports = {
         }
       ],
       "name": "Deposit",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "DirectDepositEvent",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "DirectWithdrawalEvent",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "IndirectDepositEvent",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "IndirectWithdrawalEvent",
       "type": "event"
     },
     {
@@ -326,6 +367,25 @@ module.exports = {
           "indexed": false,
           "internalType": "uint256",
           "name": "_unbondNonce",
+          "type": "uint256"
+        }
+      ],
+      "name": "UnbondNonceClaimed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_unbondNonce",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_currentEpoch",
           "type": "uint256"
         }
       ],
@@ -656,6 +716,13 @@ module.exports = {
           "type": "uint256"
         }
       ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "expiryCheck",
+      "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },
