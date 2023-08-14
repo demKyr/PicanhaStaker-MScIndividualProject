@@ -28,9 +28,7 @@ useEffect(() => {
           const loadedBalance = await contract.balanceOf(signerAddr);
           const loadedBalanceMATIC = await contract.toAssets(loadedBalance);
           const loadedBalanceMATICFloat = parseFloat(ethers.utils.formatEther(loadedBalanceMATIC));
-          const loadedRewards = parseFloat((loadedBalanceMATIC - loadedBalance)/1e18);
           modelInfo["balance"] = truncateDecimals(loadedBalanceMATICFloat,5).toString();
-          modelInfo["rewards"] = truncateDecimals(loadedRewards,5).toString();
 
           const loadedPreshares = await contract.getUserPreshares(signerAddr);
           modelInfo["preshares"] = truncateDecimals(parseFloat(ethers.utils.formatEther(loadedPreshares)),5).toString();
@@ -67,11 +65,6 @@ useEffect(() => {
         <div className={classes.listItem}>
           <span className={classes.title}>Preshares:</span>
           <span className={classes.value}>{loadedModelInfo["preshares"]} MATIC</span>
-        </div>
-        <hr className={classes.horizontalLine}/>
-        <div className={classes.listItem}>
-          <span className={classes.title}>Rewards:</span>
-          <span className={classes.value}>{loadedModelInfo["rewards"]} MATIC</span>
         </div>
         <hr className={classes.horizontalLine}/>
         <div className={classes.listItem}>
