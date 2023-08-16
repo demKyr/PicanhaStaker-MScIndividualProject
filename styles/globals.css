@@ -56,3 +56,22 @@ a {
   font-style: italic;
   color: rgb(108, 108, 108);
 }
+
+
+
+.error-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh;
+  font-style: italic;
+  padding: 20px;
+  background-color: var(--primaryColor);
+  color: var(--textColor);
+  border: 3px solid var(--secondaryColor);
+  border-radius: 4px;
+}
