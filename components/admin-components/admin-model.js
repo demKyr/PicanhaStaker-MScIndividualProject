@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useWeb3React } from "@web3-react/core";
 import { ethers } from "ethers";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 import Button from "../ui/button";
 import classes from "./admin-model.module.css";
@@ -13,6 +15,25 @@ function AdminModel(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [loadedModelInfo, setLoadedModelInfo] = useState([]);
   const signer = provider.getSigner();
+  const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
+  const [successSnackbarMessage, setSuccessSnackbarMessage] = useState("");
+  const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
+  const [errorSnackbarMessage, setErrorSnackbarMessage] = useState("");
+  const [loadingSnackbarOpen, setLoadingSnackbarOpen] = useState(false);
+
+  const showSuccessSnackbar = (message) => {
+    setSuccessSnackbarMessage(message);
+    setSuccessSnackbarOpen(true);
+  };
+  
+  const showErrorSnackbar = (message) => {
+    setErrorSnackbarMessage(message);
+    setErrorSnackbarOpen(true);
+  };
+
+  const showLoadingSnackbar = () => {
+    setLoadingSnackbarOpen(true);
+  };
 
   function submitHandler(event) {
     event.preventDefault();
@@ -23,13 +44,22 @@ function AdminModel(props) {
       const signerAddr = await signer.getAddress();
       const contract = new ethers.Contract(contractAddresses["staker"], stakerAbi, signer);
       try {
+        showLoadingSnackbar();
         const tx = await contract.indirectStake(
           { 
             from: signerAddr,
             gasLimit: 2_000_000
           });
+          await tx.wait().then((receipt) => {
+            showSuccessSnackbar("Staking was successful!"); 
+          }).catch((err) => {
+            console.log("Transaction Failed! Error: ", err)
+            showErrorSnackbar("Transaction Failed!"); 
+          });
       } catch (error) {
         console.error("Error in staking", error);
+      } finally {
+        setLoadingSnackbarOpen(false);
       }
     } else {
       document.getElementById("executeButton").innerHTML =
@@ -42,13 +72,22 @@ function AdminModel(props) {
       const signerAddr = await signer.getAddress();
       const contract = new ethers.Contract(contractAddresses["staker"], stakerAbi, signer);
       try {
+        showLoadingSnackbar();
         const tx = await contract.indirectUnstakeRequest(
           { 
             from: signerAddr,
             gasLimit: 2_000_000
           });
+          await tx.wait().then((receipt) => {
+            showSuccessSnackbar("Staking was successful!"); 
+          }).catch((err) => {
+            console.log("Transaction Failed! Error: ", err)
+            showErrorSnackbar("Transaction Failed!"); 
+          });
       } catch (error) {
         console.error("Error in staking", error);
+      } finally {
+        setLoadingSnackbarOpen(false);
       }
     } else {
       document.getElementById("executeButton").innerHTML =
@@ -112,6 +151,35 @@ function AdminModel(props) {
             )}
           </Button>
         </div>
+        <Snackbar open={successSnackbarOpen} autoHideDuration={6000} onClose={() => setSuccessSnackbarOpen(false)}>
+          <MuiAlert
+            elevation={6}
+            variant="filled"
+            onClose={() => setSuccessSnackbarOpen(false)}
+            severity="success"
+          >
+            {successSnackbarMessage}
+          </MuiAlert>
+        </Snackbar>
+        <Snackbar open={errorSnackbarOpen} autoHideDuration={6000} onClose={() => setErrorSnackbarOpen(false)}>
+          <MuiAlert
+            elevation={6}
+            variant="filled"
+            onClose={() => setErrorSnackbarOpen(false)}
+            severity="error"
+          >
+            {errorSnackbarMessage}
+          </MuiAlert>
+        </Snackbar>
+        <Snackbar open={loadingSnackbarOpen}>
+          <MuiAlert
+            elevation={6}
+            variant="filled"
+            severity="info"
+          >
+            Loading...
+          </MuiAlert>
+        </Snackbar>
       </div>
     </form>
   );
