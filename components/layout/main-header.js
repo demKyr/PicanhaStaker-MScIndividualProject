@@ -16,8 +16,6 @@ function MainHeader() {
       if (provider) {
         const signer = provider.getSigner();
         const address = await signer.getAddress();
-        console.log('address',address);
-        console.log(contractAddresses["treasury"]);
         setIsAdmin(contractAddresses["treasury"] === address);
       }
     };
