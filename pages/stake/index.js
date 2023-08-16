@@ -126,6 +126,8 @@ function StakePage() {
   return (
     <div>
       <UserInfoModel />
+      <p className="note">Note: The approved balance needs to be equal or greater that the amount to be staked. 
+      <br/>For indirect staking you need to take into account the fee.</p>
       <StakeModel onIndirectStake={handleIndirectStake} onDirectStake={handleDirectStake} onApprove={handleApprove}/>
       <Snackbar open={successSnackbarOpen} autoHideDuration={6000} onClose={() => setSuccessSnackbarOpen(false)}>
         <MuiAlert
