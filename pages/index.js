@@ -32,7 +32,7 @@ function HomePage() {
     <div>
       <h1 className={classes.title}>Welcome to TruStake Picanha vault</h1>
       <div className={classes.logo}>
-        <Image src="/logo.png" alt="home" width="350" height="350" />
+        <Image src="/logo.png" alt="home" width="250" height="250" />
       </div>
       <p className={classes.bodyText}>
         TruStake Picanha vault is a staking vault for MATIC tokens,<br/>  meticulously designed to optimize transaction fees 

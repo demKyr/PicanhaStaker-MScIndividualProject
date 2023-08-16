@@ -27,6 +27,7 @@ function AdminPage() {
         <AdminInfoModel isSuccessSnackbarOpen={isSuccessSnackbarOpen}/>
         <p className="note">Reminder: Total Shares * Share Price + Total Preshares = Total Staked + Unclaimed Rewards + Vault Balance - wQueueBalance</p>
         <AdminModel />
+        <div style={{ marginBottom: '100px' }}></div>
       </div>
     );
   } else {
