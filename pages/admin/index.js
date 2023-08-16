@@ -9,6 +9,7 @@ function AdminPage() {
   const { activate, active, library: provider } = useWeb3React();
   const signer = provider.getSigner();
   const [userAddress, setUserAddress] = useState(null);
+  const [isSuccessSnackbarOpen, setIsSuccessSnackbarOpen] = useState(false);
 
   useEffect(() => {
     if (active && signer) {
@@ -23,7 +24,7 @@ function AdminPage() {
   if (userAddress === contractAddresses["treasury"]) {
     return (
       <div>
-        <AdminInfoModel />
+        <AdminInfoModel isSuccessSnackbarOpen={isSuccessSnackbarOpen}/>
         <p className="note">Reminder: Total Shares * Share Price + Total Preshares = Total Staked + Unclaimed Rewards + Vault Balance - wQueueBalance</p>
         <AdminModel />
       </div>

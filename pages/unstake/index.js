@@ -17,10 +17,12 @@ function UnstakePage() {
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
   const [errorSnackbarMessage, setErrorSnackbarMessage] = useState("");
   const [loadingSnackbarOpen, setLoadingSnackbarOpen] = useState(false);
+  const [isSuccessSnackbarOpen, setIsSuccessSnackbarOpen] = useState(false);
 
   const showSuccessSnackbar = (message) => {
     setSuccessSnackbarMessage(message);
     setSuccessSnackbarOpen(true);
+    setIsSuccessSnackbarOpen(true);
   };
   
   const showErrorSnackbar = (message) => {
@@ -96,7 +98,7 @@ function UnstakePage() {
 
   return (
     <div>
-      <UserInfoModel />
+      <UserInfoModel isSuccessSnackbarOpen={isSuccessSnackbarOpen} />
       <p className="note">Note: Having preshares indicates that you currently have pending indirect stake requests.
       <br/>While you have the option to withdraw funds that have not been staked yet, we highly recommend against doing so. 
       <br/>Please be aware that executing this action may result in significantly higher gas fees.</p>

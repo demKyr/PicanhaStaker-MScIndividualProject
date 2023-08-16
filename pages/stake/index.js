@@ -18,10 +18,12 @@ function StakePage() {
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
   const [errorSnackbarMessage, setErrorSnackbarMessage] = useState("");
   const [loadingSnackbarOpen, setLoadingSnackbarOpen] = useState(false);
+  const [isSuccessSnackbarOpen, setIsSuccessSnackbarOpen] = useState(false);
 
   const showSuccessSnackbar = (message) => {
     setSuccessSnackbarMessage(message);
     setSuccessSnackbarOpen(true);
+    setIsSuccessSnackbarOpen(true);
   };
   
   const showErrorSnackbar = (message) => {
@@ -125,7 +127,7 @@ function StakePage() {
 
   return (
     <div>
-      <UserInfoModel />
+      <UserInfoModel isSuccessSnackbarOpen={isSuccessSnackbarOpen} />
       <p className="note">Note: The approved balance needs to be equal or greater that the amount to be staked. 
       <br/>For indirect staking you need to take into account the fee.</p>
       <StakeModel onIndirectStake={handleIndirectStake} onDirectStake={handleDirectStake} onApprove={handleApprove}/>

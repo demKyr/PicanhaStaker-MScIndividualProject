@@ -24,6 +24,7 @@ function AdminModel(props) {
   const showSuccessSnackbar = (message) => {
     setSuccessSnackbarMessage(message);
     setSuccessSnackbarOpen(true);
+    setIsSuccessSnackbarOpen(true);
   };
   
   const showErrorSnackbar = (message) => {
@@ -126,7 +127,7 @@ function AdminModel(props) {
       }
     }
     fetchData();
-  }, []);
+  }, [props.isSuccessSnackbarOpen]);
 
   return (
     <form className={classes.form} onSubmit={submitHandler}>

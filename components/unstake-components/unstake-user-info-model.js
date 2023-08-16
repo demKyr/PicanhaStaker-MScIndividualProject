@@ -8,7 +8,7 @@ import { maticGoerliAbi } from "../../constants/matic-goerli-abi";
 import { contractAddresses } from "../../constants/contract-address";
 import { truncateDecimals } from "../../constants/functions";
 
-function UserInfoModel() {
+function UserInfoModel(props) {
 
   const { activate, active, library: provider } = useWeb3React();
   const [isLoading, setIsLoading] = useState(true);
@@ -50,7 +50,7 @@ useEffect(() => {
       }
     }
     fetchData();
-  }, []);
+  }, [props.isSuccessSnackbarOpen]);
 
   return (
     <div className={classes.userInfo}>
