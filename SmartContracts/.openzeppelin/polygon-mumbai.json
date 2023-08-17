@@ -1,0 +1,235 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0xcfAB8530CcF1f9936DAEDE537D6EBbC75289006d",
+    "txHash": "0xc6472cbd94181c571eba44886c9dbe949593afdf3439f75991e05ef9748bdc9e"
+  },
+  "proxies": [
+    {
+      "address": "0x8510E8637b51AebE68713e5de1928445B790A75f",
+      "txHash": "0x39b6ff35d8f051274a98433a702524e52c10c5b3ae89578f6f15137ad9a18b69",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xD8F01d1412DA1cc4ae6CDB21aA1B96905866babC",
+      "txHash": "0x82e8bf55dad56f465f93737fbca4a6109f65e20bdcdba7a00c20b285a755d65b",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "aab7bcc7f86bb85b14d8f097077f5d131c3d8139096d8669777bb550b54929a5": {
+      "address": "0x022420797D9491b455c345375C48b62a21155158",
+      "txHash": "0x63201438cd0f05a0f870331ef5ed2fe43b39e4a206c5f95edd1c2241dfd30e28",
+      "layout": {
+        "solcVersion": "0.8.14",
+        "storage": [
+          {
+            "label": "stakingTokenAddress",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "StakerStorage",
+            "src": "contracts/main/StakerStorage.sol:13"
+          },
+          {
+            "label": "stakeManagerContractAddress",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "StakerStorage",
+            "src": "contracts/main/StakerStorage.sol:14"
+          },
+          {
+            "label": "validatorShareContractAddress",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address",
+            "contract": "StakerStorage",
+            "src": "contracts/main/StakerStorage.sol:15"
+          },
+          {
+            "label": "whitelistAddress",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_address",
+            "contract": "StakerStorage",
+            "src": "contracts/main/StakerStorage.sol:17"
+          },
+          {
+            "label": "treasuryAddress",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_address",
+            "contract": "StakerStorage",
+            "src": "contracts/main/StakerStorage.sol:19"
+          },
+          {
+            "label": "totalShares",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_uint256",
+            "contract": "StakerStorage",
+            "src": "contracts/main/StakerStorage.sol:23"
+          },
+          {
+            "label": "claimedRewards",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256",
+            "contract": "StakerStorage",
+            "src": "contracts/main/StakerStorage.sol:24"
+          },
+          {
+            "label": "phi",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint256",
+            "contract": "StakerStorage",
+            "src": "contracts/main/StakerStorage.sol:25"
+          },
+          {
+            "label": "cap",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_uint256",
+            "contract": "StakerStorage",
+            "src": "contracts/main/StakerStorage.sol:26"
+          },
+          {
+            "label": "userShares",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "StakerStorage",
+            "src": "contracts/main/StakerStorage.sol:28"
+          },
+          {
+            "label": "unbondingWithdrawals",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_mapping(t_uint256,t_struct(Withdrawal)3622_storage)",
+            "contract": "StakerStorage",
+            "src": "contracts/main/StakerStorage.sol:29"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "StakerStorage",
+            "src": "contracts/main/StakerStorage.sol:32"
+          },
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "61",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "61",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "62",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "112",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "113",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:94"
+          },
+          {
+            "label": "_status",
+            "offset": 0,
+            "slot": "162",
+            "type": "t_uint256",
+            "contract": "ReentrancyGuardUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:38"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "163",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "ReentrancyGuardUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol:80"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(Withdrawal)3622_storage)": {
+            "label": "mapping(uint256 => struct Withdrawal)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(Withdrawal)3622_storage": {
+            "label": "struct Withdrawal",
+            "members": [
+              {
+                "label": "user",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "amount",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
+    }
+  }
+}
