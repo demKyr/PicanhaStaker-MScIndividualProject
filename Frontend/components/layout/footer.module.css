@@ -4,7 +4,7 @@
     width: 100%;
     text-align: center;
     background-color: var(--primaryColor); 
-    padding: 10px 0;
+    padding: 1px 0;
     /* min-height: 1vh; */
     /* margin-bottom: 0px; */
 }
@@ -12,17 +12,19 @@
 .footerContent {
     /* margin-top:10px; */
     position: relative;
-    margin-bottom: 10px; 
+    margin-bottom: 5px; 
   }
   
-  .footerNote {
+  .footerNote,
+  .link {
     text-align: center;
     font-style: italic;
     font-size: small;
     margin-top: 5px;
   }
-  
-  .footerNote a {
+
+  .footerNote a,
+  .link {
     color: var(--secondaryColor);
     text-decoration: underline;
   }
