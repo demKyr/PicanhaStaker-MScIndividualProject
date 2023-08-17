@@ -11,7 +11,7 @@ to-do.txt
 /coverage
 
 # next.js
-/.next/
+*/.next/
 /out/
 
 # production
