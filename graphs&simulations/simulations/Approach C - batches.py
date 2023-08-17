@@ -1,6 +1,6 @@
 #%%
 
-from queueUsingDictionary import queue
+from C_queueUsingDictionary import queue
 from datetime import datetime
 
 

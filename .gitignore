@@ -1,3 +1,7 @@
 
 *.pyc
 .DS_Store
+__pycache__/
+*.py[cod]
+*$py.class
+graphs&simulations/simulations/other
