@@ -39,3 +39,20 @@ __pycache__/
 *.py[cod]
 *$py.class
 graphs&simulations/simulations/other
+
+node_modules
+.env
+coverage
+coverage.json
+typechain
+typechain-types
+
+# Hardhat files
+cache
+artifacts
+
+# MacOS
+.DS_Store
+.openzeppelin/unknown-31337.json
+
+copies&backups
