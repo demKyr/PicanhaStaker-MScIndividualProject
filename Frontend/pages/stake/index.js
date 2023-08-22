@@ -18,12 +18,12 @@ function StakePage() {
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
   const [errorSnackbarMessage, setErrorSnackbarMessage] = useState("");
   const [loadingSnackbarOpen, setLoadingSnackbarOpen] = useState(false);
-  const [isSuccessSnackbarOpen, setIsSuccessSnackbarOpen] = useState(false);
+  const [isSuccessSnackbarOpen, setIsSuccessSnackbarOpen] = useState(0);
 
   const showSuccessSnackbar = (message) => {
     setSuccessSnackbarMessage(message);
     setSuccessSnackbarOpen(true);
-    setIsSuccessSnackbarOpen(true);
+    setIsSuccessSnackbarOpen(isSuccessSnackbarOpen + 1);
   };
   
   const showErrorSnackbar = (message) => {
