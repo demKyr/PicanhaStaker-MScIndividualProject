@@ -789,7 +789,7 @@ contract TruStakeMATICv2 is
         _mint(treasuryAddress, shareIncreaseTsy);
 
         // emit event with unbond nonce 
-        emit UnbondNonceClaimed(latestUnbondingNonce);
+        emit UnbondNonceClaimed(_unbondNonce);
     }
 
     // *** CONVERTERS ***
