@@ -35,3 +35,7 @@ This folder contains the implementation for the frontend using Next.js framework
 
 ### Graphs & Simulations folder
 This folder contains simulations and graphs for the proposed designs.
+
+### Autotasks folder
+This folder contains the code of the autotasks that run using OpenZeppelin defender
+
