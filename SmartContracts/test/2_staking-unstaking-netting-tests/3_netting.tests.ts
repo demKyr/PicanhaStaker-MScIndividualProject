@@ -1,17 +1,13 @@
 import { loadFixture, time } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 import { deployment } from "../helpers/fixture";
-import { calculateTrsyWithdrawFees, calculateSharesFromAmount, parseEther } from "../helpers/math";
-import { submitCheckpoint } from "../helpers/state-interaction";
-import exp from "constants";
+import { parseEther } from "../helpers/math";
 
 describe("NETTING", () => {
   let TREASURY_INITIAL_DEPOSIT
   let one, two, three, staker, treasury, phiPrecision, deployer;
   let depositFee = 0.001;
   let withdrawalFee = 0.001;
-  let dQueueThreshold = 15000;
-  let wQueueThreshold = 15000;
   let userInitialDeposit = parseEther(50_000);
   beforeEach(async () => {
   // reset to fixture

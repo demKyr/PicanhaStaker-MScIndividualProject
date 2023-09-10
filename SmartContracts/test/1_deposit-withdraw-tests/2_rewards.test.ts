@@ -16,7 +16,6 @@ describe("Checkpoint Submissions", () => {
 
     // store initial rewards value (should be zero)
     let lastRewards = await staker.totalRewards();
-    // console.log("Rewards:", lastRewards.toString());
     
     // submit as many times as there are saved checkpoints, check rewards always increase
     for(let i = 0; i<5; i++){
@@ -26,9 +25,6 @@ describe("Checkpoint Submissions", () => {
 
       // set new rewards
       let newRewards = await staker.totalRewards()
-
-      // uncomment to see how rewards increase for a deposit of 1k
-      // console.log("Rewards:", newRewards.toString());
 
       // check values are increasing each time
       expect(newRewards).to.be.greaterThan(lastRewards);

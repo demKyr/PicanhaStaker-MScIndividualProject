@@ -1,11 +1,4 @@
-/** Testing initializing, modifiers, setters, and getters of the TruStakeMATIC vault. */
-
-import { AddressZero } from "@ethersproject/constants";
-import {
-  impersonateAccount,
-  loadFixture,
-  stopImpersonatingAccount
-} from "@nomicfoundation/hardhat-network-helpers";
+import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 import { BigNumber } from "ethers";
 import { ethers, upgrades } from "hardhat";
@@ -98,28 +91,6 @@ describe("INIT", () => {
 
   describe("ATTACKS", () => {
     it("inflation frontrunning attack investigation", async () => {
-      // Not really testing anything as the first transaction will not work (a min. of 1 MATIC
-      // has now been added on deposits), but if this is run on a version of the stker contract
-      // without this requirement, it can show what share price is inflated to based on different
-      // initial deposit amounts.
-
-      // Attack Description:
-      // - first (malicious) user deposits 1 wei of MATIC, receives 1 wei of shares
-      // - second (malicious) user (probably could be same as first) sends 10k MATIC
-      //   directly to the vault, inflating the price from 1.0 to the extreme value of 1.0e22
-      // - now, the next (legitimate) users who deposit 199999 MATIC will only receive
-      //   1 wei of shares
-
-      // Investigation Results:
-      // - In the case of a first deposit of 1 wei, a 10k transfer will inflate the price to
-      //   1e22 MATIC/TruMATIC.
-      // - In the case of a 1 MATIC first deposit, it will inflate it to 1e4 MATIC/TruMATIC,
-      //   which is expected.
-
-      // Test Description:
-      // one deposits 1 wei (check balances and share price)
-      // two sends 10ke18 wei (check balances)
-      // check that share price isn't crazy -- if it is, the contract must be changed
 
       const initSharePrice: [BigNumber, BigNumber] = [BigNumber.from(10).pow(18), BigNumber.from(1)];
       const depositAmount = parseEther(1); // BigNumber.from(1);
@@ -143,17 +114,6 @@ describe("INIT", () => {
       // send 10k matic as second malicious user (two)
       await token.connect(two).transfer(staker.address, parseEther(10000));
 
-      // log new share price and balances
-
-      // console.log(await staker.sharePrice());
-      // console.log(await staker.balanceOf(one.address));
-      // console.log(await staker.balanceOf(two.address));
-      // console.log(await staker.balanceOf(three.address));
-
-      // when depositAmount is 1 wei: price goes up to ~1e40, which equals 1e22 MATIC for 1 TruMATIC
-      // when depositAmount is 1 MATIC: price goes up to ~1e22, which equals 1e4 MATIC for 1 TruMATIC
-      // this means the min. deposit to get a share is 1e4 wei, which equals 1e-14 MATIC, which is
-      // small enough to not cause problems
     });
 
     // -------------------------- <v3> ---------------------------

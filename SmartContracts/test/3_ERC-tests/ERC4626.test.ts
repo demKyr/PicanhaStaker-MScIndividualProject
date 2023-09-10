@@ -10,10 +10,7 @@ describe("ERC-4626", () => {
 
   // Test constants
   const DEPOSIT = parseEther(5000);
-  const SHARES = parseEther(4000);
   const WITHDRAWAL = parseEther(500);
-  const REDEMPTION = parseEther(2000);
-  const ALLOCATION = parseEther(100);
 
   beforeEach(async () => {
     ({ one: depositor, two: receiver, staker, token: MATIC, deployer } = await loadFixture(deployment));

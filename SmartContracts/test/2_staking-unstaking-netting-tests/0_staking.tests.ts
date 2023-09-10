@@ -1,8 +1,7 @@
 import { loadFixture, time } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 import { deployment } from "../helpers/fixture";
-import { calculateTrsyWithdrawFees, calculateSharesFromAmount, parseEther } from "../helpers/math";
-import { submitCheckpoint } from "../helpers/state-interaction";
+import { parseEther } from "../helpers/math";
 
 describe("STAKING", () => {
     let one, two, three, staker, treasury, phiPrecision, deployer;

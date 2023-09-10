@@ -1,11 +1,7 @@
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
-import * as constants from "../helpers/constants";
 import { deployment } from "../helpers/fixture";
-import {
-  calculateAmountFromShares, calculateSharesFromAmount, parseEther
-} from "../helpers/math";
-import { submitCheckpoint } from "../helpers/state-interaction";
+import { parseEther } from "../helpers/math";
 
 describe("DEPOSITS", () => {
   let one, two, staker, stakeManager;
@@ -15,7 +11,6 @@ describe("DEPOSITS", () => {
     ({ one, two, staker, stakeManager } = await loadFixture(deployment));
   });
 
-  // -------------------------- <v3> ---------------------------
   describe("Preshares", async () => {
     
     it("Indirect Deposits to preshares", async () => {
@@ -48,6 +43,5 @@ describe("DEPOSITS", () => {
     });
     
   });
-  // -------------------------- </v3> --------------------------
   
 });

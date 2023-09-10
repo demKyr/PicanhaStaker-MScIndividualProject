@@ -1,11 +1,8 @@
 import { loadFixture, time } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 import { deployment } from "../helpers/fixture";
-import { calculateTrsyWithdrawFees, calculateSharesFromAmount, parseEther } from "../helpers/math";
-import { submitCheckpoint } from "../helpers/state-interaction";
-import { AddressZero } from "@ethersproject/constants";
+import { parseEther } from "../helpers/math";
 import { advanceEpochs } from "../helpers/state-interaction";
-const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 
 
 describe("UNSTAKING CLAIM", () => {

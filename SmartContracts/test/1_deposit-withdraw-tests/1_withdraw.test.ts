@@ -1,5 +1,3 @@
-/** Testing initiating withdrawals from the TruStakeMATIC vault. */
-
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 import * as constants from "../helpers/constants";
