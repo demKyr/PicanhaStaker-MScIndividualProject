@@ -29,7 +29,7 @@ ax.fill_between(t, 0, directDeposit(), where=(t > dQueueThreshold), interpolate=
 # Increase font sizes
 ax.set_title('Cost comparison between directDeposit() and indirectDeposit()', fontsize=16)
 ax.set_ylabel('Cost [MATIC]', fontsize=16)
-ax.set_xlabel('Deposit amount [days]', fontsize=16)
+ax.set_xlabel('Deposit amount [MATIC]', fontsize=16)
 ax.tick_params(axis='both', labelsize=16)  # Increase tick label font size
 ax.axvline(x=dQueueThreshold, color='r', linestyle='--', label="dQueueThreshold")
 ax.axvline(x=minDepositAmount, color='y', linestyle='--', label="minDepositAmount")
